@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+
+    <script src="js/socket.io.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/app.js"></script>
+
+    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        ons.ready(function() {
+            console.log("Onsen UI is ready!");
+        });
+    </script>
+</head>
+<body>
+
+    <ons-tabbar>
+      <ons-tab
+        icon="fa-mobile"
+        page="add_device.html"
+        active
+      ></ons-tab>
+
+      <ons-tab
+        icon="fa-globe"
+        page="deploy_device.html"
+      ></ons-tab>
+
+      <ons-tab
+        icon="fa-search"
+        page="search_device.html"
+      ></ons-tab>
+
+      <ons-tab
+        icon="fa-cog"
+        page="config_app.html"
+      ></ons-tab>
+    </ons-tabbar>
+
+    <ons-template id="add_device.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="center">Add a Device to Menagerie</div>
+        </ons-toolbar>
+
+        <ons-list>
+          <ons-list-item>
+            <ons-input
+              id="add-device-location"
+              placeholder="Location ID"
+              float></ons-input>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-input
+              id="add-device-mac"
+              placeholder="MAC Address"
+              float></ons-input>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-input
+              id="add-device-id"
+              placeholder="Asset Tag"
+              float></ons-input>
+          </ons-list-item>
+        </ons-list>
+
+        <div class="content-padded">
+          <ons-button
+            onclick=""
+            id="add-device-scan-btn"
+            modifier="large">
+            Scan
+          </ons-button>
+        </div>
+
+        <div class="content-padded">
+          <ons-button
+            onclick="addDeviceHandler()"
+            id="add-device-submit-btn"
+            modifier="large"
+            disabled>
+            Not Connected
+          </ons-button>
+        </div>
+
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="deploy_device.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="center">Deploy a Device</div>
+        </ons-toolbar>
+
+        <p style="text-align: center;">
+          Deploy a device here.
+        </p>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="search_device.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="center">Search for a Device</div>
+        </ons-toolbar>
+
+        <p style="text-align: center;">
+          Search for device tab.
+        </p>
+      </ons-page>
+    </ons-template>
+
+    <ons-template id="config_app.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="center">Configuration</div>
+        </ons-toolbar>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <p>
+              <ons-input
+                id="config-token-field"
+                modifier="underbar"
+                placeholder="Token"
+                float></ons-input>
+            </p>
+            <p>
+              <ons-input
+                id="config-server-field"
+                modifier="underbar"
+                placeholder="Server URL"
+                float></ons-input>
+            </p>
+
+            <div class="content-padded">
+              <ons-button
+                onclick="authHandler()"
+                id="submit-config-btn"
+                modifier="">
+                Submit
+              </ons-button>
+            </div>
+
+        </div>
+
+      </ons-page>
+    </ons-template>
+
+</body>
+</html>
