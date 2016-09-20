@@ -109,6 +109,15 @@ var startScan = function() {
 	// 		alert("Scanning failed: " + error);
 	// 	}
 	// );
+
+  var checkedField = $('#add-device-list > ons-list-item > div > ons-input')
+        .filter(function() {
+          return this.hasAttribute('checked');
+        })
+        .siblings()
+        .attr('id');
+
+  document.getElementById(checkedField).value = 'test';
 };
 
 function _clear(e){
