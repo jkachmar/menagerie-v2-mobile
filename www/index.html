@@ -45,6 +45,8 @@
       ></ons-tab>
     </ons-tabbar>
 
+    <!-- ADD A DEVICE -->
+
     <ons-template id="add_device.html">
       <ons-page>
         <ons-toolbar>
@@ -97,17 +99,54 @@
       </ons-page>
     </ons-template>
 
+    <!-- DEPLOY A DEVICE -->
+
     <ons-template id="deploy_device.html">
       <ons-page>
         <ons-toolbar>
-          <div class="center">Deploy a Device</div>
+          <div class="center">Deploy a Device Within Menagerie</div>
         </ons-toolbar>
 
-        <p style="text-align: center;">
-          Deploy a device here.
-        </p>
+        <ons-list id="deploy-device-list">
+          <ons-list-item>
+            <ons-input name="deploy-device-selector" type="radio" checked></ons-input>
+            <ons-input
+              id="deploy-device-id"
+              placeholder="Device ID"
+              float></ons-input>
+          </ons-list-item>
+          <ons-list-item>
+            <ons-input name="deploy-device-selector" type="radio"></ons-input>
+            <ons-input
+              id="deploy-device-location"
+              placeholder="Location ID"
+              float></ons-input>
+          </ons-list-item>
+        </ons-list>
+
+        <div class="content-padded">
+          <ons-button
+            onclick="deployDeviceScan()"
+            id="add-device-scan-btn"
+            modifier="large">
+            Scan
+          </ons-button>
+        </div>
+
+        <div class="content-padded">
+          <ons-button
+            onclick="deployDeviceSubmit()"
+            id="deploy-device-submit-btn"
+            modifier="large"
+            disabled>
+            Not Connected
+          </ons-button>
+        </div>
+
       </ons-page>
     </ons-template>
+
+    <!-- SEARCH FOR A DEVICE -->
 
     <ons-template id="search_device.html">
       <ons-page>

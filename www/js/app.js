@@ -7,6 +7,7 @@ var _form;
 
 var	SERVER_URL = '';
 var WEB_APP_TOKEN = '';
+var ENDPOINT = '/thing/barcode-scann';
 
 window.cordova = true; // Fix iOS status bar overlap
 
@@ -20,63 +21,29 @@ function sanitizePayload(result) {
   return sanitized;
 }
 
-function scanBarcode(checkedFieldId) {
+function getCheckedFieldId(inputFieldName) {
+  var checkedFieldId =
+        document.querySelector('input[name=' + inputFieldName + ']:checked')
+        .parentNode
+        .parentNode
+        .nextElementSibling
+        .getAttribute('id');
+  return checkedFieldId;
+}
+
+function scanBarcode(inputFieldId) {
   cordova.plugins.barcodeScanner.scan(
     function (result) {
       var s = 'Result: ' + result.text + '<br/>' +
             'Format: ' + result.format + '<br/>' +
             'Cancelled: ' + result.cancelled;
       var sanitizedResult = sanitizePayload(result);
-      document.getElementById(checkedFieldId).value = result;
+      document.getElementById(inputFieldId).value = result;
     },
     function (error) {
       ons.notification.alert('Scanning failed: ' + error);
     }
   );
-}
-
-
-/** Add Device tab -----------------------------------------------------------*/
-
-var addDeviceScan = function() {
-  // HACK: this could almost definitely be improved
-  var checkedFieldId =
-        document.querySelector('input[name=add-device-selector]:checked')
-        .parentNode
-        .parentNode
-        .nextElementSibling
-        .getAttribute('id');
-  scanBarcode(checkedFieldId);
-};
-
-var addDeviceSubmit = function() {
-  var deviceId = document.getElementById('add-device-id').value;
-  var deviceLocation = document.getElementById('add-device-location').value;
-  var deviceMac = document.getElementById('add-device-mac').value;
-
-	var payload = {
-		alias: deviceMac,
-		location: deviceLocation,
-		assetTag: deviceId
-	};
-
-  if (SERVER_URL) {
-    console.log(SERVER_URL);
-
-  } else {
-    ons.notification.alert('No Server URL specified');
-  }
-};
-
-/** Configuration tab --------------------------------------------------------*/
-
-function getToken() {
-  console.log('WEB APP TOKEN', WEB_APP_TOKEN);
-  return 'Bearer ' + WEB_APP_TOKEN;
-}
-
-function setAuthorizationToken(xhr) {
-  xhr.setRequestHeader('Authorization', getToken());
 }
 
 function notifyReading(endpoint, payload){
@@ -108,6 +75,66 @@ function notifyReading(endpoint, payload){
   console.log('POST', endpoint, JSON.stringify(payload));
 }
 
+function submitPayload(payload) {
+  if (SERVER_URL) {
+    console.log(SERVER_URL);
+    notifyReading(ENDPOINT, payload);
+
+  } else {
+    ons.notification.alert('No Server URL specified');
+  }
+}
+
+/** Add Device tab -----------------------------------------------------------*/
+
+var addDeviceScan = function() {
+  var checkedFieldId = getCheckedFieldId('add-device-selector');
+  scanBarcode(checkedFieldId);
+};
+
+var addDeviceSubmit = function() {
+  var deviceId = document.getElementById('add-device-id').value;
+  var deviceLocation = document.getElementById('add-device-location').value;
+  var deviceMac = document.getElementById('add-device-mac').value;
+
+  var payload = {
+    alias: deviceMac,
+    location: deviceLocation,
+    assetTag: deviceId,
+  };
+  submitPayload(payload);
+};
+
+/** Deploy Device tab --------------------------------------------------------*/
+
+var deployDeviceScan = function() {
+  var checkedFieldId = getCheckedFieldId('deploy-device-selector');
+  scanBarcode(checkedFieldId);
+};
+
+var deployDeviceSubmit = function() {
+  var deviceId = document.getElementById('deploy-device-id').value;
+  var deviceLocation = document.getElementById('deploy-device-location').value;
+
+  var payload = {
+    alias: deviceMac,
+    location: deviceLocation,
+    assetTag: deviceId
+  };
+  submitPayload(payload);
+};
+
+/** Configuration tab --------------------------------------------------------*/
+
+function getToken() {
+  console.log('WEB APP TOKEN', WEB_APP_TOKEN);
+  return 'Bearer ' + WEB_APP_TOKEN;
+}
+
+function setAuthorizationToken(xhr) {
+  xhr.setRequestHeader('Authorization', getToken());
+}
+
 // Handle token auth and server URL
 var authHandler = function() {
   SERVER_URL = document.getElementById('config-server-field').value;
@@ -115,7 +142,7 @@ var authHandler = function() {
 
   if (SERVER_URL && WEB_APP_TOKEN) {
     document.getElementById('add-device-submit-btn').innerHTML = 'Connecting...';
-    notifyReading('', payload);
+    document.getElementById('deploy-device-submit-btn').innerHTML = 'Connecting...';
 
     // TODO: uncomment this when the socket stuff is implemented
     // createSocket(SERVER_URL);
