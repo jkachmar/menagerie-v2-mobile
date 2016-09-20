@@ -54,47 +54,56 @@
         </ons-toolbar>
 
         <ons-list id="add-device-list">
+
+          <ons-list-item tappable>
+            <ons-input
+              id="add-device-type"
+              placeholder="Device Type"
+              float></ons-input>
+          </ons-list-item>
+
           <ons-list-item>
             <ons-input name="add-device-selector" type="radio" checked></ons-input>
+            <ons-input
+              id="add-device-id"
+              placeholder="Device ID"
+              float></ons-input>
+          </ons-list-item>
+
+          <ons-list-item>
+            <ons-input name="add-device-selector" type="radio"></ons-input>
             <ons-input
               id="add-device-location"
               placeholder="Location ID"
               float></ons-input>
           </ons-list-item>
-          <ons-list-item>
-            <ons-input name="add-device-selector" type="radio"></ons-input>
-            <ons-input
-              id="add-device-mac"
-              placeholder="MAC Address"
-              float></ons-input>
-          </ons-list-item>
-          <ons-list-item>
-            <ons-input name="add-device-selector" type="radio"></ons-input>
-            <ons-input
-              id="add-device-id"
-              placeholder="Asset Tag"
-              float></ons-input>
-          </ons-list-item>
+
         </ons-list>
 
-        <div class="content-padded">
-          <ons-button
-            onclick="addDeviceScan()"
-            id="add-device-scan-btn"
-            modifier="large">
-            Scan
-          </ons-button>
-        </div>
+        <ons-row>
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="addDeviceScan()"
+              id="add-device-scan-btn"
+              modifier="large">
+              Scan
+            </ons-button>
+          </div>
+          </ons-col>
 
-        <div class="content-padded">
-          <ons-button
-            onclick="addDeviceSubmit()"
-            id="add-device-submit-btn"
-            modifier="large"
-            disabled>
-            Not Connected
-          </ons-button>
-        </div>
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="addDeviceSubmit()"
+              id="add-device-submit-btn"
+              modifier="large"
+              disabled>
+              Submit
+            </ons-button>
+          </div>
+          </ons-col>
+        </ons-row>
 
       </ons-page>
     </ons-template>
@@ -108,6 +117,7 @@
         </ons-toolbar>
 
         <ons-list id="deploy-device-list">
+
           <ons-list-item>
             <ons-input name="deploy-device-selector" type="radio" checked></ons-input>
             <ons-input
@@ -115,6 +125,7 @@
               placeholder="Device ID"
               float></ons-input>
           </ons-list-item>
+
           <ons-list-item>
             <ons-input name="deploy-device-selector" type="radio"></ons-input>
             <ons-input
@@ -122,26 +133,33 @@
               placeholder="Location ID"
               float></ons-input>
           </ons-list-item>
+
         </ons-list>
 
-        <div class="content-padded">
-          <ons-button
-            onclick="deployDeviceScan()"
-            id="add-device-scan-btn"
-            modifier="large">
-            Scan
-          </ons-button>
-        </div>
+        <ons-row>
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="deployDeviceScan()"
+              id="deploy-device-scan-btn"
+              modifier="large">
+              Scan
+            </ons-button>
+          </div>
+          </ons-col>
 
-        <div class="content-padded">
-          <ons-button
-            onclick="deployDeviceSubmit()"
-            id="deploy-device-submit-btn"
-            modifier="large"
-            disabled>
-            Not Connected
-          </ons-button>
-        </div>
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="deployDeviceSubmit()"
+              id="deploy-device-submit-btn"
+              modifier="large"
+              disabled>
+              Submit
+            </ons-button>
+          </div>
+          </ons-col>
+        </ons-row>
 
       </ons-page>
     </ons-template>
@@ -154,11 +172,45 @@
           <div class="center">Search for a Device</div>
         </ons-toolbar>
 
-        <p style="text-align: center;">
-          Search for device tab.
-        </p>
+        <div style="text-align: center; margin-top: 30px;">
+            <p>
+              <ons-input
+                id="search-device-id"
+                modifier="underbar"
+                placeholder="Device ID"
+                float></ons-input>
+            </p>
+        </div>
+
+        <ons-row>
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="searchDeviceScan()"
+              id="search-device-scan-btn"
+              modifier="large">
+              Scan
+            </ons-button>
+          </div>
+          </ons-col>
+
+          <ons-col>
+          <div class="content-padded">
+            <ons-button
+              onclick="searchDeviceSubmit()"
+              id="search-device-submit-btn"
+              modifier="large"
+              disabled>
+              Search
+            </ons-button>
+          </div>
+          </ons-col>
+        </ons-row>
+
       </ons-page>
     </ons-template>
+
+    <!-- CONFIGURE AUTHENTICATION -->
 
     <ons-template id="config_app.html">
       <ons-page>

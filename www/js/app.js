@@ -32,19 +32,23 @@ function getCheckedFieldId(inputFieldName) {
 }
 
 function scanBarcode(inputFieldId) {
-  cordova.plugins.barcodeScanner.scan(
-    function (result) {
-      var s = 'Result: ' + result.text + '<br/>' +
-            'Format: ' + result.format + '<br/>' +
-            'Cancelled: ' + result.cancelled;
-      var sanitizedResult = sanitizePayload(result);
-      document.getElementById(inputFieldId).value = result;
-    },
-    function (error) {
-      ons.notification.alert('Scanning failed: ' + error);
-    }
-  );
+  document.getElementById(inputFieldId).value = 'test';
 }
+
+// function scanBarcode(inputFieldId) {
+//   cordova.plugins.barcodeScanner.scan(
+//     function (result) {
+//       var s = 'Result: ' + result.text + '<br/>' +
+//             'Format: ' + result.format + '<br/>' +
+//             'Cancelled: ' + result.cancelled;
+//       var sanitizedResult = sanitizePayload(result);
+//       document.getElementById(inputFieldId).value = result;
+//     },
+//     function (error) {
+//       ons.notification.alert('Scanning failed: ' + error);
+//     }
+//   );
+// }
 
 function notifyReading(endpoint, payload){
   console.log('=> NOTIFY READING', endpoint, JSON.stringify(payload));
@@ -98,9 +102,9 @@ var addDeviceSubmit = function() {
   var deviceMac = document.getElementById('add-device-mac').value;
 
   var payload = {
-    alias: deviceMac,
-    location: deviceLocation,
-    assetTag: deviceId,
+    macAddr: deviceMac,
+    locationId: deviceLocation,
+    deviceId: deviceId,
   };
   submitPayload(payload);
 };
@@ -117,12 +121,14 @@ var deployDeviceSubmit = function() {
   var deviceLocation = document.getElementById('deploy-device-location').value;
 
   var payload = {
-    alias: deviceMac,
-    location: deviceLocation,
-    assetTag: deviceId
+    locationId: deviceLocation,
+    deviceId: deviceId,
   };
   submitPayload(payload);
 };
+
+/** Search Device tab --------------------------------------------------------*/
+
 
 /** Configuration tab --------------------------------------------------------*/
 
