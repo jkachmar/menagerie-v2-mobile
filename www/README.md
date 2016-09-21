@@ -1,4 +1,21 @@
-# Welcome to Onsen UI 2!
+## Menagerie 2.0 Companion Application
 
-This template is using Onsen UI, a HTML5 framework that is focusing on the speed and ease of use.
-For details, please check out [Onsen UI Website](http://onsenui.io) and [the documents](http://onsenui.io/v2/).
+### Development
+
+#### Desktop
+
+```
+npm install -g monaca
+monaca preview
+```
+
+#### Development (on iOS)
+
+```
+npm install -g cordova
+cordova platform add ios
+cordova plugin add cordova-plugin-console
+cordova plugin add phonegap-plugin-barcodescanner
+cordova plugin add cordova-plugin-whitelist
+cordova build ios
+```

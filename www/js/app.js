@@ -32,7 +32,8 @@ function getCheckedFieldId(inputFieldName) {
 }
 
 function scanBarcode(inputFieldId) {
-  document.getElementById(inputFieldId).value = 'test';
+  // document.getElementById(inputFieldId).value = 'test';
+  return 'test';
 }
 
 // function scanBarcode(inputFieldId) {
@@ -82,8 +83,7 @@ function notifyReading(endpoint, payload){
 function submitPayload(payload) {
   if (SERVER_URL) {
     console.log(SERVER_URL);
-    notifyReading(ENDPOINT, payload);
-
+    // notifyReading(ENDPOINT, payload);
   } else {
     ons.notification.alert('No Server URL specified');
   }
@@ -93,7 +93,8 @@ function submitPayload(payload) {
 
 var addDeviceScan = function() {
   var checkedFieldId = getCheckedFieldId('add-device-selector');
-  scanBarcode(checkedFieldId);
+  var barcodeInput = scanBarcode();
+  document.getElementById(checkedFieldId).value = barcodeInput;
 };
 
 var addDeviceSubmit = function() {
@@ -113,7 +114,8 @@ var addDeviceSubmit = function() {
 
 var deployDeviceScan = function() {
   var checkedFieldId = getCheckedFieldId('deploy-device-selector');
-  scanBarcode(checkedFieldId);
+  var barcodeInput = scanBarcode();
+  document.getElementById(checkedFieldId).value = barcodeInput;
 };
 
 var deployDeviceSubmit = function() {
@@ -128,6 +130,20 @@ var deployDeviceSubmit = function() {
 };
 
 /** Search Device tab --------------------------------------------------------*/
+
+var searchDeviceScan = function() {
+  var barcodeInput = scanBarcode();
+  document.getElementById('search-device-id').value = barcodeInput;
+}
+
+var searchDeviceSubmit = function() {
+  var deviceId = document.getElementById('search-device-id').value;
+
+  var payload = {
+    deviceId: deviceId,
+  };
+  submitPayload(payload);
+}
 
 
 /** Configuration tab --------------------------------------------------------*/
