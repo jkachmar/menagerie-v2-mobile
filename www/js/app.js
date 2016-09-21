@@ -36,6 +36,7 @@ function scanBarcode(inputFieldId) {
   return 'test';
 }
 
+
 // function scanBarcode(inputFieldId) {
 //   cordova.plugins.barcodeScanner.scan(
 //     function (result) {
@@ -80,12 +81,30 @@ function notifyReading(endpoint, payload){
   console.log('POST', endpoint, JSON.stringify(payload));
 }
 
+function makePayload(fields) {
+  var payload = {};
+  Object.keys(fields).map(function(k) {
+    var v = document.getElementById(fields[k]).value;
+    payload[k] = v;
+  });
+
+  return payload;
+}
+
+function clearFields(fields) {
+  Object.keys(fields).forEach(function(k) {
+    document.getElementById(fields[k]).value = '';
+  });
+}
+
 function submitPayload(payload) {
   if (SERVER_URL) {
     console.log(SERVER_URL);
     // notifyReading(ENDPOINT, payload);
+    return true;
   } else {
     ons.notification.alert('No Server URL specified');
+    return false;
   }
 }
 
@@ -98,16 +117,16 @@ var addDeviceScan = function() {
 };
 
 var addDeviceSubmit = function() {
-  var deviceId = document.getElementById('add-device-id').value;
-  var deviceLocation = document.getElementById('add-device-location').value;
-  var deviceMac = document.getElementById('add-device-mac').value;
-
-  var payload = {
-    macAddr: deviceMac,
-    locationId: deviceLocation,
-    deviceId: deviceId,
+  var fields = {
+    deviceId: 'add-device-id',
+    deviceLocation: 'add-device-location',
   };
-  submitPayload(payload);
+
+  var payload = makePayload(fields);
+
+  if (submitPayload(payload)) {
+    clearFields(fields);
+  }
 };
 
 /** Deploy Device tab --------------------------------------------------------*/
@@ -119,14 +138,16 @@ var deployDeviceScan = function() {
 };
 
 var deployDeviceSubmit = function() {
-  var deviceId = document.getElementById('deploy-device-id').value;
-  var deviceLocation = document.getElementById('deploy-device-location').value;
-
-  var payload = {
-    locationId: deviceLocation,
-    deviceId: deviceId,
+  var fields = {
+    deviceId: 'deploy-device-id',
+    deviceLocation: 'deploy-device-location',
   };
-  submitPayload(payload);
+
+  var payload = makePayload(fields);
+
+  if (submitPayload(payload)) {
+    clearFields(fields);
+  }
 };
 
 /** Search Device tab --------------------------------------------------------*/
@@ -137,14 +158,16 @@ var searchDeviceScan = function() {
 }
 
 var searchDeviceSubmit = function() {
-  var deviceId = document.getElementById('search-device-id').value;
-
-  var payload = {
-    deviceId: deviceId,
+  var fields = {
+    deviceId: 'search-device-id',
   };
-  submitPayload(payload);
-}
 
+  var payload = makePayload(fields);
+
+  if (submitPayload(payload)) {
+    clearFields(fields);
+  }
+}
 
 /** Configuration tab --------------------------------------------------------*/
 
@@ -239,16 +262,6 @@ var startScan = function() {
     }
 	);
 };
-
-function _clear(e) {
-	e && e.preventDefault();
-
-	_device.val('');
-	_location.val('');
-	_assetTag.val('');
-
-	return false;
-}
 
 /** Validations -------------------------------------------------------------*/
 
