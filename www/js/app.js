@@ -246,23 +246,6 @@ function createSocket(url) {
   window.socket = socket;
 }
 
-/** Old code -----------------------------------------------------------------*/
-
-var startScan = function() {
-  cordova.plugins.barcodeScanner.scan(
-    function (result) {
-      var s = "Result: " + result.text + "<br/>" +
-      "Format: " + result.format + "<br/>" +
-      "Cancelled: " + result.cancelled;
-      result = sanitizePayload(result);
-      handleReading(result);
-    },
-    function (error) {
-      alert("Scanning failed: " + error);
-    }
-	);
-};
-
 /** Validations -------------------------------------------------------------*/
 
 function handleReading(result) {
