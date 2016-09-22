@@ -47,6 +47,17 @@
 
     <!-- ADD A DEVICE -->
 
+    <ons-dialog id="add-device-type-dialog">
+      <div style="text-align: center; padding: 10px;">
+
+        <ons-list id="add-device-type-list">
+        </ons-list>
+
+        <br>
+        <ons-button onclick="document.getElementById('add-device-type-dialog').hide()">Close</ons-button>
+
+    </ons-dialog>
+
     <ons-template id="add_device.html">
       <ons-page>
         <ons-toolbar>
@@ -55,13 +66,18 @@
 
         <ons-list id="add-device-list">
 
-          <ons-list-item tappable>
+          <ons-list-header>Select Device Type</ons-list-header>
+          <ons-list-item
+            modifier="chevron"
+            onclick="getDeviceTypes()"
+            tappable>
             <ons-input
               id="add-device-type"
               placeholder="Device Type"
-              float></ons-input>
+              readonly></ons-input>
           </ons-list-item>
 
+          <ons-list-header>Input Device Information</ons-list-header>
           <ons-list-item>
             <ons-input name="add-device-selector" type="radio" checked></ons-input>
             <ons-input
@@ -118,6 +134,7 @@
 
         <ons-list id="deploy-device-list">
 
+          <ons-list-header>Input Device Information</ons-list-header>
           <ons-list-item>
             <ons-input name="deploy-device-selector" type="radio" checked></ons-input>
             <ons-input

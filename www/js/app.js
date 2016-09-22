@@ -5,11 +5,22 @@ var _location;
 var _assetTag;
 var _form;
 
-var	SERVER_URL = '';
+var	SERVER_URL = 'http://localhost:8080'; // for testing purposes
 var WEB_APP_TOKEN = '';
-var ENDPOINT = '/thing/barcode-scann';
+var ENDPOINT = {
+  deviceType: '/devices/devicetypes',
+  barcodeScan: '/thing/barcode-scann',
+};
+
+var SUBMIT_BUTTON_LIST = [
+  'add-device-submit-btn',
+  'deploy-device-submit-btn',
+  'search-device-submit-btn',
+];
 
 window.cordova = true; // Fix iOS status bar overlap
+
+var testObject = {};
 
 /** Common functions ---------------------------------------------------------*/
 function sanitizePayload(result) {
@@ -32,10 +43,8 @@ function getCheckedFieldId(inputFieldName) {
 }
 
 function scanBarcode(inputFieldId) {
-  // document.getElementById(inputFieldId).value = 'test';
   return 'test';
 }
-
 
 // function scanBarcode(inputFieldId) {
 //   cordova.plugins.barcodeScanner.scan(
@@ -44,23 +53,22 @@ function scanBarcode(inputFieldId) {
 //             'Format: ' + result.format + '<br/>' +
 //             'Cancelled: ' + result.cancelled;
 //       var sanitizedResult = sanitizePayload(result);
-//       document.getElementById(inputFieldId).value = result;
+//       return result;
 //     },
 //     function (error) {
 //       ons.notification.alert('Scanning failed: ' + error);
+//       return '';
 //     }
 //   );
 // }
 
-function notifyReading(endpoint, payload){
+function notifyReading(url, endpoint, payload){
   console.log('=> NOTIFY READING', endpoint, JSON.stringify(payload));
 
   socket.emit('/thing/socketes', payload);
 
-  resultDiv.innerHTML = endpoint;
-
   $.ajax({
-    url: endpoint,
+    url: SERVER_URL + ENDPOINTS.barcodeScan,
     data: payload,
     type: 'POST',
     crossDomain: true,
@@ -69,13 +77,16 @@ function notifyReading(endpoint, payload){
   }).done(function(res) {
     console.log('AJAX response: ', JSON.stringify(res));
     if (res.success) {
-      resultDiv.innerHTML = 'Transaction complete';
+      // TODO: don't use alerts for status updates
+      ons.notification.alert('Transaction complete');
     } else {
-      resultDiv.innerHTML = res.message; 
+      // TODO: don't use alerts for status updates
+      ons.notification.alert(res.message);
     }
   }).fail(function(e) {
+    // TODO: see if this message needs to be pretty-printed
+    ons.notification.alert(JSON.stringify(e, null, 4));
     console.error('ERROR %s', e, JSON.stringify(e));
-    resultDiv.innerHTML = '<h4>Error</h4><br/><code>' + JSON.stringify(e, null, 4) + '</code>';
   });
 
   console.log('POST', endpoint, JSON.stringify(payload));
@@ -108,6 +119,36 @@ function submitPayload(payload) {
   }
 }
 
+/** Device Type List Handler -------------------------------------------------*/
+
+var getDeviceTypes = function() {
+  $.ajax({
+    url: SERVER_URL + ENDPOINT.deviceType,
+    type: 'GET',
+    crossDomain: true,
+    dataType: 'json',
+  }).done(function(res) {
+    // HACK: there is definitely a better way to do this
+    var list = '';
+    res.forEach(function(each) {
+      var item =
+            '<ons-list-item>' +
+            each.deviceType +
+            '</ons-list-item>';
+      list += item;
+    });
+
+    document.getElementById('add-device-type-list').innerHTML = list;
+    document.getElementById('add-device-type-dialog').show();
+
+    $('#add-device-type-list').on('click', 'ons-list-item', function(event){
+      document.getElementById('add-device-type').value = this.textContent;
+      document.getElementById('add-device-type-dialog').hide();
+    });
+  });
+}
+
+
 /** Add Device tab -----------------------------------------------------------*/
 
 var addDeviceScan = function() {
@@ -118,6 +159,7 @@ var addDeviceScan = function() {
 
 var addDeviceSubmit = function() {
   var fields = {
+    deviceType: 'add-device-type',
     deviceId: 'add-device-id',
     deviceLocation: 'add-device-location',
   };
@@ -186,10 +228,10 @@ var authHandler = function() {
   WEB_APP_TOKEN = document.getElementById('config-server-field').value;
 
   if (SERVER_URL && WEB_APP_TOKEN) {
-    document.getElementById('add-device-submit-btn').innerHTML = 'Connecting...';
-    document.getElementById('deploy-device-submit-btn').innerHTML = 'Connecting...';
-
     // TODO: uncomment this when the socket stuff is implemented
+    SUBMIT_BUTTON_LIST.forEach(function(each) {
+      document.getElementById(each).removeAttribute('disabled', '');
+    });
     // createSocket(SERVER_URL);
   } else {
     ons.notification.alert('Incomplete authentication fields');
@@ -223,19 +265,26 @@ function createSocket(url) {
     ],
   });
 
+  // If we're connected, enable form submission
   socket.on('connect', function () {
     console.log('Connected');
-    document.getElementById('add-device-submit-btn').setAttribute('disabled', '');
-    document.getElementById('add-device-submit-btn').innerHTML = 'Submit';
+    SUBMIT_BUTTON_LIST.forEach(function(each) {
+      document.getElementById(each).removeAttribute('disabled', '');
+    });
   });
 
+  // If there was a connection error, disable form submission
   socket.on('error', function(e){
-    document.getElementById('add-device-submit-btn').innerHTML = 'Error connecting!';
+    ons.notification.alert('Error connecting to Menagerie!');
+    SUBMIT_BUTTON_LIST.forEach(function(each) {
+      document.getElementById(each).setAttribute('disabled', '');
+    });
   });
 
   socket.on('/thing/barcode-scann', function(payload){
     console.log('UPDATED: ', JSON.stringify(payload));
-    resultDiv.innerHTML = payload.success ? '<p>All GOOD</p>' : '<p>Error :(</p>';
+    var response = payload.success ? 'All Good!' : 'Error';
+    ons.notification.alert(response);
   });
 
   if (socket.doConnect) {
