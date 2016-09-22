@@ -1,5 +1,7 @@
 ## Menagerie 2.0 Companion Application
 
+<div style="text-align:center"><img src="menagerie-frontend.png"/></div>
+
 ### Development
 
 #### Desktop
@@ -9,7 +11,7 @@ npm install -g monaca
 monaca preview
 ```
 
-#### Development (on iOS)
+#### iOS Emulator
 
 ```
 npm install -g cordova
