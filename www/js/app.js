@@ -167,6 +167,7 @@ var addDeviceSubmit = function() {
   var payload = makePayload(fields);
 
   if (submitPayload(payload)) {
+    delete fields.deviceType; // don't clear the device type selection
     clearFields(fields);
   }
 };
