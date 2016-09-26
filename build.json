@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "debug": {
+      "developmentTeam": "Joe Kachmar (Personal Team)"
+    },
+    "release": {
+      "developmentTeam": "Joe Kachmar (Personal Team)"
+    }
+  }
+}

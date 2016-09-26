@@ -5,11 +5,12 @@ var _location;
 var _assetTag;
 var _form;
 
-var	SERVER_URL = 'http://localhost:8080'; // for testing purposes
 var WEB_APP_TOKEN = '';
-var ENDPOINT = {
-  deviceType: '/devices/devicetypes',
-  barcodeScan: '/thing/barcode-scann',
+var	SERVER_URL = ''; // for testing purposes
+var SLUG = {
+  addDevice: '/devices',
+  getDeviceTypes: '/devices/devicetypes',
+  searchDevice: '/devices/search',
 };
 
 var SUBMIT_BUTTON_LIST = [
@@ -17,10 +18,6 @@ var SUBMIT_BUTTON_LIST = [
   'deploy-device-submit-btn',
   'search-device-submit-btn',
 ];
-
-window.cordova = true; // Fix iOS status bar overlap
-
-var testObject = {};
 
 /** Common functions ---------------------------------------------------------*/
 function sanitizePayload(result) {
@@ -42,54 +39,16 @@ function getCheckedFieldId(inputFieldName) {
   return checkedFieldId;
 }
 
-function scanBarcode(inputFieldId) {
-  return 'test';
-}
-
-// function scanBarcode(inputFieldId) {
-//   cordova.plugins.barcodeScanner.scan(
-//     function (result) {
-//       var s = 'Result: ' + result.text + '<br/>' +
-//             'Format: ' + result.format + '<br/>' +
-//             'Cancelled: ' + result.cancelled;
-//       var sanitizedResult = sanitizePayload(result);
-//       return result;
-//     },
-//     function (error) {
-//       ons.notification.alert('Scanning failed: ' + error);
-//       return '';
-//     }
-//   );
-// }
-
-function notifyReading(url, endpoint, payload){
-  console.log('=> NOTIFY READING', endpoint, JSON.stringify(payload));
-
-  socket.emit('/thing/socketes', payload);
-
-  $.ajax({
-    url: SERVER_URL + ENDPOINTS.barcodeScan,
-    data: payload,
-    type: 'POST',
-    crossDomain: true,
-    dataType: 'json',
-    beforeSend: setAuthorizationToken,
-  }).done(function(res) {
-    console.log('AJAX response: ', JSON.stringify(res));
-    if (res.success) {
-      // TODO: don't use alerts for status updates
-      ons.notification.alert('Transaction complete');
-    } else {
-      // TODO: don't use alerts for status updates
-      ons.notification.alert(res.message);
+function scanBarcode(checkedFieldId) {
+  cordova.plugins.barcodeScanner.scan(
+    function (result) {
+      sanitizedResult = sanitizePayload(result);
+      document.getElementById(checkedFieldId).value = sanitizedResult.text;
+    },
+    function (error) {
+      ons.notification.alert('Scanning failed: ' + error);
     }
-  }).fail(function(e) {
-    // TODO: see if this message needs to be pretty-printed
-    ons.notification.alert(JSON.stringify(e, null, 4));
-    console.error('ERROR %s', e, JSON.stringify(e));
-  });
-
-  console.log('POST', endpoint, JSON.stringify(payload));
+  );
 }
 
 function makePayload(fields) {
@@ -108,22 +67,10 @@ function clearFields(fields) {
   });
 }
 
-function submitPayload(payload) {
-  if (SERVER_URL) {
-    console.log(SERVER_URL);
-    // notifyReading(ENDPOINT, payload);
-    return true;
-  } else {
-    ons.notification.alert('No Server URL specified');
-    return false;
-  }
-}
-
 /** Device Type List Handler -------------------------------------------------*/
-
 var getDeviceTypes = function() {
   $.ajax({
-    url: SERVER_URL + ENDPOINT.deviceType,
+    url: SERVER_URL + SLUG.getDeviceTypes,
     type: 'GET',
     crossDomain: true,
     dataType: 'json',
@@ -148,14 +95,41 @@ var getDeviceTypes = function() {
   });
 }
 
-
 /** Add Device tab -----------------------------------------------------------*/
 
 var addDeviceScan = function() {
   var checkedFieldId = getCheckedFieldId('add-device-selector');
-  var barcodeInput = scanBarcode();
-  document.getElementById(checkedFieldId).value = barcodeInput;
+  scanBarcode(checkedFieldId);
 };
+
+function addDevice(url, slug, payload, fields){
+  var endpoint = url + slug;
+
+  $.ajax({
+    url: endpoint,
+    data: JSON.stringify(payload),
+    contentType: 'application/json',
+    type: 'POST',
+    crossDomain: true,
+    dataType: 'json',
+  }).done(function(res) {
+    console.log('AJAX response: ', JSON.stringify(res));
+    if (res.success) {
+      // TODO: don't use alerts for status updates
+      ons.notification.alert('Transaction complete');
+      clearFields(fields);
+    } else {
+      // TODO: don't use alerts for status updates
+      ons.notification.alert(res.message);
+    }
+  }).fail(function(e) {
+    // TODO: see if this message needs to be pretty-printed
+    ons.notification.alert(JSON.stringify(e, null, 4));
+    console.error('ERROR %s', e, JSON.stringify(e));
+  });
+
+  console.log('POST', endpoint, JSON.stringify(payload));
+}
 
 var addDeviceSubmit = function() {
   var fields = {
@@ -166,18 +140,14 @@ var addDeviceSubmit = function() {
 
   var payload = makePayload(fields);
 
-  if (submitPayload(payload)) {
-    delete fields.deviceType; // don't clear the device type selection
-    clearFields(fields);
-  }
+  delete fields.deviceType
+  addDevice(SERVER_URL, SLUG.addDevice, payload, fields);
 };
 
 /** Deploy Device tab --------------------------------------------------------*/
-
 var deployDeviceScan = function() {
   var checkedFieldId = getCheckedFieldId('deploy-device-selector');
-  var barcodeInput = scanBarcode();
-  document.getElementById(checkedFieldId).value = barcodeInput;
+  scanBarcode(checkedFieldId);
 };
 
 var deployDeviceSubmit = function() {
@@ -194,10 +164,22 @@ var deployDeviceSubmit = function() {
 };
 
 /** Search Device tab --------------------------------------------------------*/
+var searchDevice = function(url, slug) {
+  var endpoint = url + slug;
+  $.ajax({
+    url: endpoint,
+    data: JSON.stringify(payload),
+    contentType: 'application/json',
+    type: 'GET',
+    crossDomain: true,
+    dataType: 'json',
+  }).done(function(res) {
+    console.log(res);
+  });
+}
 
 var searchDeviceScan = function() {
-  var barcodeInput = scanBarcode();
-  document.getElementById('search-device-id').value = barcodeInput;
+  scanBarcode('search-device-id');
 }
 
 var searchDeviceSubmit = function() {
@@ -213,7 +195,6 @@ var searchDeviceSubmit = function() {
 }
 
 /** Configuration tab --------------------------------------------------------*/
-
 function getToken() {
   console.log('WEB APP TOKEN', WEB_APP_TOKEN);
   return 'Bearer ' + WEB_APP_TOKEN;
@@ -240,7 +221,6 @@ var authHandler = function() {
 };
 
 /** Websocket Stuff ----------------------------------------------------------*/
-
 function createSocket(url) {
   if (socket && socket.io.uri === url) {
     if (socket.connected) {
@@ -294,29 +274,4 @@ function createSocket(url) {
   }
 
   window.socket = socket;
-}
-
-/** Validations -------------------------------------------------------------*/
-
-function handleReading(result) {
-  var validations = {
-    location: /^[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}$/,
-    device: /^([0-9A-Fa-f]{2}[:-]?){5}([0-9A-Fa-f]{2})$/,
-    assetTag: /^[0-9]{6}$/,
-  };
-
-  var reg = false;
-  var valid = false;
-  Object.keys(validations).map(function(key){
-    reg = validations[key];
-    if(!reg.test(result.text)) {
-      return;
-    }
-    $('#' + key).val(result.text);
-    valid = true;
-  });
-
-  if (!valid) {
-    ons.notification.alert('Invalid barcode input');
-  }
 }
