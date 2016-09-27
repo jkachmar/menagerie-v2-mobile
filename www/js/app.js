@@ -1,10 +1,10 @@
 var WEB_APP_TOKEN = '';
 var	SERVER_URL = ''; // for testing purposes
 
-var SLUG = {
+var ENDPOINTS = {
   addDevice: '/devices',
   getDeviceTypes: '/devices/devicetypes',
-  searchDevice: '/devices/search',
+  search: '/devices/search',
 };
 
 var SUBMIT_BUTTON_LIST = [
@@ -16,7 +16,7 @@ var SUBMIT_BUTTON_LIST = [
 /** Device Type List Handler -------------------------------------------------*/
 var getDeviceTypes = function() {
   $.ajax({
-    url: SERVER_URL + SLUG.getDeviceTypes,
+    url: SERVER_URL + ENDPOINTS.getDeviceTypes,
     type: 'GET',
     crossDomain: true,
     dataType: 'json',
@@ -42,40 +42,11 @@ var getDeviceTypes = function() {
 }
 
 /** Add Device tab -----------------------------------------------------------*/
-
+// TODO: VERIFY FUNCTIONALITY
 var addDeviceScan = function() {
-  var checkedFieldId = commons.getCheckedFieldId('add-device-selector');
-  commons.scanBarcode(checkedFieldId);
+  var checkedFieldId = util.getCheckedFieldId('add-device-selector');
+  util.scanBarcode(checkedFieldId);
 };
-
-function addDevice(url, slug, payload, fields){
-  var endpoint = url + slug;
-
-  $.ajax({
-    url: endpoint,
-    data: JSON.stringify(payload),
-    contentType: 'application/json',
-    type: 'POST',
-    crossDomain: true,
-    dataType: 'json',
-  }).done(function(res) {
-    console.log('AJAX response: ', JSON.stringify(res));
-    if (res.success) {
-      // TODO: don't use alerts for status updates
-      ons.notification.alert('Transaction complete');
-      clearFields(fields);
-    } else {
-      // TODO: don't use alerts for status updates
-      ons.notification.alert(res.message);
-    }
-  }).fail(function(e) {
-    // TODO: see if this message needs to be pretty-printed
-    ons.notification.alert(JSON.stringify(e, null, 4));
-    console.error('ERROR %s', e, JSON.stringify(e));
-  });
-
-  console.log('POST', endpoint, JSON.stringify(payload));
-}
 
 var addDeviceSubmit = function() {
   var fields = {
@@ -84,17 +55,18 @@ var addDeviceSubmit = function() {
     deviceLocation: 'add-device-location',
   };
 
-  var payload = commons.makePayload(fields);
+  var payload = util.makePayload(fields);
   console.log(payload);
 
-  delete fields.deviceType
-  addDevice(SERVER_URL, SLUG.addDevice, payload, fields);
+  delete fields.deviceType;
+  addDevice.submit(SERVER_URL, ENDPOINTS.addDevice, payload, fields);
 };
 
 /** Deploy Device tab --------------------------------------------------------*/
+// TODO: VERIFY FUNCTIONALITY
 var deployDeviceScan = function() {
-  var checkedFieldId = commons.getCheckedFieldId('deploy-device-selector');
-  commons.scanBarcode(checkedFieldId);
+  var checkedFieldId = util.getCheckedFieldId('deploy-device-selector');
+  util.scanBarcode(checkedFieldId);
 };
 
 var deployDeviceSubmit = function() {
@@ -103,47 +75,29 @@ var deployDeviceSubmit = function() {
     deviceLocation: 'deploy-device-location',
   };
 
-  var payload = commons.makePayload(fields);
+  var payload = util.makePayload(fields);
 
-  // TODO: submitPayload deprecated, fix
-  if (submitPayload(payload)) {
-    clearFields(fields);
-  }
+  deployDevice.submit(SERVER_URL, payload);
 };
 
-/** Search Device tab --------------------------------------------------------*/
-var searchDevice = function(url, slug) {
-  var endpoint = url + slug;
-  $.ajax({
-    url: endpoint,
-    data: JSON.stringify(payload),
-    contentType: 'application/json',
-    type: 'GET',
-    crossDomain: true,
-    dataType: 'json',
-  }).done(function(res) {
-    console.log(res);
-  });
-}
+/** Search Menagerie tab -------------------------------------------------------*/
+// TODO: VERIFY FUNCTIONALITY
 
+// TODO: Rename to reflect device-agnostic searches
 var searchDeviceScan = function() {
-  commons.scanBarcode('search-device-id');
+  util.scanBarcode('search-device-id');
 }
 
+// TODO: Rename to reflect device-agnostic searches
 var searchDeviceSubmit = function() {
-  var fields = {
-    deviceId: 'search-device-id',
-  };
+  var endpoint = '/thing/find'
+  var searchField = document.getElementById('search-device-id').value;
 
-  var payload = commons.makePayload(fields);
-
-  // TODO: submitPayload deprecated, fix
-  if (submitPayload(payload)) {
-    clearFields(fields);
-  }
+  searchMenagerie.submit(SERVER_URL, endpoint, searchField);
 }
 
 /** Configuration tab --------------------------------------------------------*/
+// TODO: REFACTOR
 function getToken() {
   console.log('WEB APP TOKEN', WEB_APP_TOKEN);
   return 'Bearer ' + WEB_APP_TOKEN;

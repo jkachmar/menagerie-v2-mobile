@@ -1,4 +1,4 @@
-var commons = (function() {
+var util = (function() {
 
   /** Common Utility Functions -----------------------------------------------*/
   var sanitizePayload = function(result) {
