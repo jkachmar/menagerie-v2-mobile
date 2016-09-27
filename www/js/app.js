@@ -1,12 +1,6 @@
-var resultDiv;
-var socket;
-var _device;
-var _location;
-var _assetTag;
-var _form;
-
 var WEB_APP_TOKEN = '';
 var	SERVER_URL = ''; // for testing purposes
+
 var SLUG = {
   addDevice: '/devices',
   getDeviceTypes: '/devices/devicetypes',
@@ -18,54 +12,6 @@ var SUBMIT_BUTTON_LIST = [
   'deploy-device-submit-btn',
   'search-device-submit-btn',
 ];
-
-/** Common functions ---------------------------------------------------------*/
-function sanitizePayload(result) {
-  // TODO: for realz
-  var sanitized = result;
-  sanitized.text = result.text.replace('/find/device/', '');
-  sanitized.text = result.text.replace('/find/location/', '');
-  sanitized.barcode = result.text;
-  return sanitized;
-}
-
-function getCheckedFieldId(inputFieldName) {
-  var checkedFieldId =
-        document.querySelector('input[name=' + inputFieldName + ']:checked')
-        .parentNode
-        .parentNode
-        .nextElementSibling
-        .getAttribute('id');
-  return checkedFieldId;
-}
-
-function scanBarcode(checkedFieldId) {
-  cordova.plugins.barcodeScanner.scan(
-    function (result) {
-      sanitizedResult = sanitizePayload(result);
-      document.getElementById(checkedFieldId).value = sanitizedResult.text;
-    },
-    function (error) {
-      ons.notification.alert('Scanning failed: ' + error);
-    }
-  );
-}
-
-function makePayload(fields) {
-  var payload = {};
-  Object.keys(fields).map(function(k) {
-    var v = document.getElementById(fields[k]).value;
-    payload[k] = v;
-  });
-
-  return payload;
-}
-
-function clearFields(fields) {
-  Object.keys(fields).forEach(function(k) {
-    document.getElementById(fields[k]).value = '';
-  });
-}
 
 /** Device Type List Handler -------------------------------------------------*/
 var getDeviceTypes = function() {
@@ -98,8 +44,8 @@ var getDeviceTypes = function() {
 /** Add Device tab -----------------------------------------------------------*/
 
 var addDeviceScan = function() {
-  var checkedFieldId = getCheckedFieldId('add-device-selector');
-  scanBarcode(checkedFieldId);
+  var checkedFieldId = commons.getCheckedFieldId('add-device-selector');
+  commons.scanBarcode(checkedFieldId);
 };
 
 function addDevice(url, slug, payload, fields){
@@ -138,7 +84,8 @@ var addDeviceSubmit = function() {
     deviceLocation: 'add-device-location',
   };
 
-  var payload = makePayload(fields);
+  var payload = commons.makePayload(fields);
+  console.log(payload);
 
   delete fields.deviceType
   addDevice(SERVER_URL, SLUG.addDevice, payload, fields);
@@ -146,8 +93,8 @@ var addDeviceSubmit = function() {
 
 /** Deploy Device tab --------------------------------------------------------*/
 var deployDeviceScan = function() {
-  var checkedFieldId = getCheckedFieldId('deploy-device-selector');
-  scanBarcode(checkedFieldId);
+  var checkedFieldId = commons.getCheckedFieldId('deploy-device-selector');
+  commons.scanBarcode(checkedFieldId);
 };
 
 var deployDeviceSubmit = function() {
@@ -156,8 +103,9 @@ var deployDeviceSubmit = function() {
     deviceLocation: 'deploy-device-location',
   };
 
-  var payload = makePayload(fields);
+  var payload = commons.makePayload(fields);
 
+  // TODO: submitPayload deprecated, fix
   if (submitPayload(payload)) {
     clearFields(fields);
   }
@@ -179,7 +127,7 @@ var searchDevice = function(url, slug) {
 }
 
 var searchDeviceScan = function() {
-  scanBarcode('search-device-id');
+  commons.scanBarcode('search-device-id');
 }
 
 var searchDeviceSubmit = function() {
@@ -187,8 +135,9 @@ var searchDeviceSubmit = function() {
     deviceId: 'search-device-id',
   };
 
-  var payload = makePayload(fields);
+  var payload = commons.makePayload(fields);
 
+  // TODO: submitPayload deprecated, fix
   if (submitPayload(payload)) {
     clearFields(fields);
   }
@@ -210,68 +159,13 @@ var authHandler = function() {
   WEB_APP_TOKEN = document.getElementById('config-server-field').value;
 
   if (SERVER_URL && WEB_APP_TOKEN) {
-    // TODO: uncomment this when the socket stuff is implemented
     SUBMIT_BUTTON_LIST.forEach(function(each) {
       document.getElementById(each).removeAttribute('disabled', '');
     });
+    // TODO: uncomment this when the socket stuff is implemented
     // createSocket(SERVER_URL);
   } else {
     ons.notification.alert('Incomplete authentication fields');
   }
 };
 
-/** Websocket Stuff ----------------------------------------------------------*/
-function createSocket(url) {
-  if (socket && socket.io.uri === url) {
-    if (socket.connected) {
-      console.log('Socket connected');
-      return;
-    }
-  }
-
-  if (socket) {
-    socket.close();
-    socket.removeAllListeners();
-    socket.doConnect = true;
-    console.log('Socket reset');
-  }
-
-  socket = io(url, {
-    transports: [
-      'polling',
-      'websocket',
-      'htmlfile',
-      'xhr-polling',
-      'jsonp-polling',
-    ],
-  });
-
-  // If we're connected, enable form submission
-  socket.on('connect', function () {
-    console.log('Connected');
-    SUBMIT_BUTTON_LIST.forEach(function(each) {
-      document.getElementById(each).removeAttribute('disabled', '');
-    });
-  });
-
-  // If there was a connection error, disable form submission
-  socket.on('error', function(e){
-    ons.notification.alert('Error connecting to Menagerie!');
-    SUBMIT_BUTTON_LIST.forEach(function(each) {
-      document.getElementById(each).setAttribute('disabled', '');
-    });
-  });
-
-  socket.on('/thing/barcode-scann', function(payload){
-    console.log('UPDATED: ', JSON.stringify(payload));
-    var response = payload.success ? 'All Good!' : 'Error';
-    ons.notification.alert(response);
-  });
-
-  if (socket.doConnect) {
-    socket.connect();
-    console.log('Socket connecting');
-  }
-
-  window.socket = socket;
-}
