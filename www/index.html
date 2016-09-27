@@ -1,275 +1,55 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="UIWebViewBounce" value="false" />
+  <meta charset="utf-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+  <preference name="DisallowOverscroll" value="true" />
+  <preference name="UIWebViewBounce" value="false" />
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/socket.io.js"></script>
-    <script type="text/javascript" src="js/jquery.js"></script>
+  <!-- <script type="text/javascript" src="cordova.js"></script> -->
+  <script type="text/javascript" src="js/socket.io.js"></script>
+  <script type="text/javascript" src="js/jquery.js"></script>
 
-    <script type="text/javascript" src="js/commons.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+  <script type="text/javascript" src="js/commons.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
 
-    <script src="lib/onsenui/js/onsenui.min.js"></script>
-    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
-    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
-    <link rel="stylesheet" href="css/style.css">
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/style.css">
 
-    <script>
-        ons.ready(function() {
-            console.log("Onsen UI is ready!");
-        });
-    </script>
+  <script>
+      ons.ready(function() {
+          console.log("Onsen UI is ready!");
+      });
+  </script>
 
 </head>
 <body>
 
-    <ons-tabbar>
-      <ons-tab
-        icon="fa-mobile"
-        page="add_device.html"
-        active
-      ></ons-tab>
+  <ons-tabbar>
+    <ons-tab
+      icon="fa-mobile"
+      page="html/add-device.html"
+      active
+    ></ons-tab>
 
-      <ons-tab
-        icon="fa-globe"
-        page="deploy_device.html"
-      ></ons-tab>
+    <ons-tab
+      icon="fa-globe"
+      page="html/deploy-device.html"
+    ></ons-tab>
 
-      <ons-tab
-        icon="fa-search"
-        page="search_device.html"
-      ></ons-tab>
+    <ons-tab
+      icon="fa-search"
+      page="html/search-device.html"
+    ></ons-tab>
 
-      <ons-tab
-        icon="fa-cog"
-        page="config_app.html"
-      ></ons-tab>
-    </ons-tabbar>
-
-    <!-- ADD A DEVICE -->
-
-    <ons-dialog id="add-device-type-dialog">
-      <div style="text-align: center; padding: 10px;">
-
-        <ons-list id="add-device-type-list">
-        </ons-list>
-
-        <br>
-        <ons-button onclick="document.getElementById('add-device-type-dialog').hide()">Close</ons-button>
-
-    </ons-dialog>
-
-    <ons-template id="add_device.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Add a Device to Menagerie</div>
-        </ons-toolbar>
-
-        <ons-list id="add-device-list">
-
-          <ons-list-header>Select Device Type</ons-list-header>
-          <ons-list-item
-            modifier="chevron"
-            onclick="getDeviceTypes()"
-            tappable>
-            <ons-input
-              id="add-device-type"
-              placeholder="Device Type"
-              readonly></ons-input>
-          </ons-list-item>
-
-          <ons-list-header>Input Device Information</ons-list-header>
-          <ons-list-item>
-            <ons-input name="add-device-selector" type="radio" checked></ons-input>
-            <ons-input
-              id="add-device-id"
-              placeholder="Device ID"
-              float></ons-input>
-          </ons-list-item>
-
-          <ons-list-item>
-            <ons-input name="add-device-selector" type="radio"></ons-input>
-            <ons-input
-              id="add-device-location"
-              placeholder="Location ID"
-              float></ons-input>
-          </ons-list-item>
-
-        </ons-list>
-
-        <ons-row>
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="addDeviceScan()"
-              id="add-device-scan-btn"
-              modifier="large">
-              Scan
-            </ons-button>
-          </div>
-          </ons-col>
-
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="addDeviceSubmit()"
-              id="add-device-submit-btn"
-              modifier="large"
-              disabled>
-              Submit
-            </ons-button>
-          </div>
-          </ons-col>
-        </ons-row>
-
-      </ons-page>
-    </ons-template>
-
-    <!-- DEPLOY A DEVICE -->
-
-    <ons-template id="deploy_device.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Deploy a Device Within Menagerie</div>
-        </ons-toolbar>
-
-        <ons-list id="deploy-device-list">
-
-          <ons-list-header>Input Device Information</ons-list-header>
-          <ons-list-item>
-            <ons-input name="deploy-device-selector" type="radio" checked></ons-input>
-            <ons-input
-              id="deploy-device-id"
-              placeholder="Device ID"
-              float></ons-input>
-          </ons-list-item>
-
-          <ons-list-item>
-            <ons-input name="deploy-device-selector" type="radio"></ons-input>
-            <ons-input
-              id="deploy-device-location"
-              placeholder="Location ID"
-              float></ons-input>
-          </ons-list-item>
-
-        </ons-list>
-
-        <ons-row>
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="deployDeviceScan()"
-              id="deploy-device-scan-btn"
-              modifier="large">
-              Scan
-            </ons-button>
-          </div>
-          </ons-col>
-
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="deployDeviceSubmit()"
-              id="deploy-device-submit-btn"
-              modifier="large"
-              disabled>
-              Submit
-            </ons-button>
-          </div>
-          </ons-col>
-        </ons-row>
-
-      </ons-page>
-    </ons-template>
-
-    <!-- SEARCH FOR A DEVICE -->
-
-    <ons-template id="search_device.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Search for a Device</div>
-        </ons-toolbar>
-
-        <div style="text-align: center; margin-top: 30px;">
-            <p>
-              <ons-input
-                id="search-device-id"
-                modifier="underbar"
-                placeholder="Device ID"
-                float></ons-input>
-            </p>
-        </div>
-
-        <ons-row>
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="searchDeviceScan()"
-              id="search-device-scan-btn"
-              modifier="large">
-              Scan
-            </ons-button>
-          </div>
-          </ons-col>
-
-          <ons-col>
-          <div class="content-padded">
-            <ons-button
-              onclick="searchDeviceSubmit()"
-              id="search-device-submit-btn"
-              modifier="large"
-              disabled>
-              Search
-            </ons-button>
-          </div>
-          </ons-col>
-        </ons-row>
-
-      </ons-page>
-    </ons-template>
-
-    <!-- CONFIGURE AUTHENTICATION -->
-
-    <ons-template id="config_app.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Configuration</div>
-        </ons-toolbar>
-
-        <div style="text-align: center; margin-top: 30px;">
-            <p>
-              <ons-input
-                id="config-token-field"
-                modifier="underbar"
-                placeholder="Token"
-                float></ons-input>
-            </p>
-            <p>
-              <ons-input
-                id="config-server-field"
-                modifier="underbar"
-                placeholder="Server URL"
-                float></ons-input>
-            </p>
-
-            <div class="content-padded">
-              <ons-button
-                onclick="authHandler()"
-                id="submit-config-btn"
-                modifier="">
-                Submit
-              </ons-button>
-            </div>
-
-        </div>
-
-      </ons-page>
-    </ons-template>
+    <ons-tab
+      icon="fa-cog"
+      page="html/config-app.html"
+    ></ons-tab>
+  </ons-tabbar>
 
 </body>
 </html>

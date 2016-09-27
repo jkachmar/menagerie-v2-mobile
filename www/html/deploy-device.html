@@ -1,0 +1,51 @@
+<!-- DEPLOY A DEVICE -->
+
+<ons-toolbar>
+  <div class="center">Deploy a Device Within Menagerie</div>
+</ons-toolbar>
+
+<ons-list id="deploy-device-list">
+
+  <ons-list-header>Input Device Information</ons-list-header>
+  <ons-list-item>
+    <ons-input name="deploy-device-selector" type="radio" checked></ons-input>
+    <ons-input
+      id="deploy-device-id"
+      placeholder="Device ID"
+      float></ons-input>
+  </ons-list-item>
+
+  <ons-list-item>
+    <ons-input name="deploy-device-selector" type="radio"></ons-input>
+    <ons-input
+      id="deploy-device-location"
+      placeholder="Location ID"
+      float></ons-input>
+  </ons-list-item>
+
+</ons-list>
+
+<ons-row>
+  <ons-col>
+    <div class="content-padded">
+      <ons-button
+        onclick="deployDeviceScan()"
+        id="deploy-device-scan-btn"
+        modifier="large">
+        Scan
+      </ons-button>
+    </div>
+  </ons-col>
+
+  <ons-col>
+    <div class="content-padded">
+      <ons-button
+        onclick="deployDeviceSubmit()"
+        id="deploy-device-submit-btn"
+        modifier="large"
+        disabled>
+        Submit
+      </ons-button>
+    </div>
+  </ons-col>
+</ons-row>
