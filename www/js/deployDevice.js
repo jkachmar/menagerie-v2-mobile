@@ -7,7 +7,7 @@ var deployDevice = (function() {
       url: url,
       data: JSON.stringify(payload),
       contentType: 'application/json',
-      type: 'PUT',
+      type: 'POST',
       crossDomain: true,
       dataType: 'json',
     }).done(function(res) {

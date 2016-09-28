@@ -1,5 +1,32 @@
 var util = (function() {
 
+  /** Common AJAX Functions -----------------------------------------------*/
+
+  var getFromMenagerie = function(server, endpoint, cbDone, cbFail) {
+    var url = server + endpoint;
+
+    // GET -> device type from Menagerie using global SERVER_URL and ENDPOINTS
+    $.ajax({
+      url: url,
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'json',
+    }).done(cbDone).fail(cbFail);
+  }
+
+  var postToMenagerie = function(server, endpoint, payload, cbDone, cbFail) {
+    var url = server + endpoint;
+
+    $.ajax({
+      url: url,
+      data: JSON.stringify(payload),
+      contentType: 'application/json',
+      type: 'POST',
+      crossDomain: true,
+      dataType: 'json',
+    }).done(cbDone).fail(cbFail);
+  }
+
   /** Common Utility Functions -----------------------------------------------*/
   var sanitizePayload = function(result) {
     // TODO: for realz
@@ -40,12 +67,6 @@ var util = (function() {
     });
 
     return payload;
-  }
-
-  var clearFields = function(fields) {
-    Object.keys(fields).forEach(function(k) {
-      document.getElementById(fields[k]).value = '';
-    });
   }
 
 /** Websocket Stuff ----------------------------------------------------------*/
@@ -105,10 +126,11 @@ var util = (function() {
   }
 
   return {
+    get: getFromMenagerie,
+    post: postToMenagerie,
     sanitizePayload: sanitizePayload,
     getCheckedFieldId: getCheckedFieldId,
     scanBarcode: scanBarcode,
     makePayload: makePayload,
-    clearFields: clearFields,
   };
 })();
