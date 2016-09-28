@@ -6,6 +6,7 @@ var ENDPOINTS = {
   checkoutDevice: '/device', // POST - deployment
   getDeviceTypes: '/devicetype', // GET
   search: '/thing/find', // GET
+  status: '/health', // GET
   updateDevice: '/device/update', // POST
 };
 
@@ -64,14 +65,15 @@ var authHandler = function() {
   SERVER_URL = document.getElementById('config-server-field').value;
   WEB_APP_TOKEN = document.getElementById('config-server-field').value;
 
-  if (SERVER_URL && WEB_APP_TOKEN) {
-    SUBMIT_BUTTON_LIST.forEach(function(each) {
-      document.getElementById(each).removeAttribute('disabled', '');
+  util.get(
+    SERVER_URL,
+    ENDPOINTS.status,
+    function(res) {
+      SUBMIT_BUTTON_LIST.forEach(function(each) {
+        document.getElementById(each).removeAttribute('disabled', '');
+      });
+    }, function(res) {
+      ons.notification.alert('Unable to connect to server :(');
     });
-    // TODO: uncomment this when the socket stuff is implemented
-    // createSocket(SERVER_URL);
-  } else {
-    ons.notification.alert('Incomplete authentication fields');
-  }
 };
 
