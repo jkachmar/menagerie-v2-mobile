@@ -61,7 +61,8 @@ var addDevice = (function() {
     util.submit(SERVER_URL, ENDPOINTS.addDevice, payload);
   };
 
-  return { submit: submitDevice,
+  return { scan: addDeviceScan,
+           submit: submitDevice,
            getTypes: getDeviceTypes,
          };
 
