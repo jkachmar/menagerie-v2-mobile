@@ -9,6 +9,13 @@ var ENDPOINTS = {
   updateDevice: '/device/update', // POST
 };
 
+var SUBMIT_BUTTON_LIST = [
+  'add-device-submit-btn',
+  'deploy-device-submit-btn',
+  'search-device-submit-btn',
+  'update-device-submit-btn',
+];
+
 /** Deploy Device tab --------------------------------------------------------*/
 // TODO: VERIFY FUNCTIONALITY
 var deployDeviceScan = function() {
@@ -28,8 +35,6 @@ var deployDeviceSubmit = function() {
 };
 
 /** Search Menagerie tab -------------------------------------------------------*/
-// TODO: VERIFY FUNCTIONALITY
-
 // TODO: Rename to reflect device-agnostic searches
 var searchDeviceScan = function() {
   util.scanBarcode('search-device-id');

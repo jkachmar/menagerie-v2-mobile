@@ -27,6 +27,29 @@ var util = (function() {
     }).done(cbDone).fail(cbFail);
   }
 
+
+  var submitPayload = function(server, endpoint, payload) {
+    // POST -> device update within Menagerie
+    // postToMenagerie(
+    //   server, url, payload,
+    //   function(res) {
+    //     console.log('AJAX response: ', JSON.stringify(res));
+    //     if (res.success) {
+    //       // TODO: don't use alerts for status updates
+    //       ons.notification.alert('Transaction complete');
+    //     } else {
+    //       // TODO: don't use alerts for status updates
+    //       ons.notification.alert(res.message);
+    //     }
+    //   }, function (res) {
+    //     // TODO: see if this message needs to be pretty-printed
+    //     ons.notification.alert(JSON.stringify(e, null, 4));
+    //     console.error('ERROR %s', e, JSON.stringify(e));
+    //   });
+
+    console.log('POST', endpoint, JSON.stringify(payload));
+  }
+
   /** Common Utility Functions -----------------------------------------------*/
   var sanitizePayload = function(result) {
     // TODO: for realz
@@ -72,6 +95,7 @@ var util = (function() {
   return {
     get: getFromMenagerie,
     post: postToMenagerie,
+    submit: submitPayload,
     sanitizePayload: sanitizePayload,
     getCheckedFieldId: getCheckedFieldId,
     scanBarcode: scanBarcode,

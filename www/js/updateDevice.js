@@ -45,28 +45,6 @@ var updateDevice = (function() {
     util.scanBarcode(checkedFieldId);
   };
 
-  function updateDevice(server, endpoint, payload){
-    // POST -> device update within Menagerie
-    util.post(
-      server, url, payload,
-      function(res) {
-        console.log('AJAX response: ', JSON.stringify(res));
-        if (res.success) {
-          // TODO: don't use alerts for status updates
-          ons.notification.alert('Transaction complete');
-        } else {
-          // TODO: don't use alerts for status updates
-          ons.notification.alert(res.message);
-        }
-      }, function (res) {
-        // TODO: see if this message needs to be pretty-printed
-        ons.notification.alert(JSON.stringify(e, null, 4));
-        console.error('ERROR %s', e, JSON.stringify(e));
-      });
-
-    console.log('POST', endpoint, JSON.stringify(payload));
-  }
-
   // Submit button function, get values from all input fields, handle
   // appropriately, and submit to the server
   var submitDevice = function() {
@@ -80,7 +58,7 @@ var updateDevice = (function() {
     payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    updateDevice.submit(SERVER_URL, ENDPOINTS.updateDevice, payload);
+    util.submit(SERVER_URL, ENDPOINTS.updateDevice, payload);
   };
 
   return { submit: submitDevice,
