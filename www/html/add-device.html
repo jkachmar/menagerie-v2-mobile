@@ -6,10 +6,10 @@
 
 <ons-list id="add-device-list">
 
-  <ons-list-header>Select Device Type</ons-list-header>
+  <ons-list-header>Device Type</ons-list-header>
   <ons-list-item
     modifier="chevron"
-    onclick="getDeviceTypes()"
+    onclick="addDevice.getTypes()"
     tappable>
     <ons-input
       id="add-device-type"
@@ -17,20 +17,28 @@
       readonly></ons-input>
   </ons-list-item>
 
-  <ons-list-header>Input Device Information</ons-list-header>
+  <ons-list-header>Device Name</ons-list-header>
+  <ons-list-item>
+    <ons-input
+      id="add-device-name"
+      placeholder="Device Name"
+      float></ons-input>
+  </ons-list-item>
+
+  <ons-list-header>Scannable Device Fields</ons-list-header>
   <ons-list-item>
     <ons-input name="add-device-selector" type="radio" checked></ons-input>
     <ons-input
-      id="add-device-id"
-      placeholder="Device ID"
+      id="add-device-tag"
+      placeholder="Asset Tag"
       float></ons-input>
   </ons-list-item>
 
   <ons-list-item>
     <ons-input name="add-device-selector" type="radio"></ons-input>
     <ons-input
-      id="add-device-location"
-      placeholder="Location ID"
+      id="add-device-id"
+      placeholder="Device ID"
       float></ons-input>
   </ons-list-item>
 
@@ -51,10 +59,10 @@
   <ons-col>
     <div class="content-padded">
       <ons-button
-        onclick="addDeviceSubmit()"
+        onclick="addDevice.submit()"
         id="add-device-submit-btn"
         modifier="large"
-        disabled>
+        >
         Submit
       </ons-button>
     </div>

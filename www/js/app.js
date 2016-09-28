@@ -1,65 +1,12 @@
 var WEB_APP_TOKEN = '';
-var	SERVER_URL = ''; // for testing purposes
+var	SERVER_URL = '';
 
 var ENDPOINTS = {
-  addDevice: '/devices',
-  getDeviceTypes: '/devices/devicetypes',
-  search: '/devices/search',
-};
-
-var SUBMIT_BUTTON_LIST = [
-  'add-device-submit-btn',
-  'deploy-device-submit-btn',
-  'search-device-submit-btn',
-];
-
-/** Device Type List Handler -------------------------------------------------*/
-var getDeviceTypes = function() {
-  $.ajax({
-    url: SERVER_URL + ENDPOINTS.getDeviceTypes,
-    type: 'GET',
-    crossDomain: true,
-    dataType: 'json',
-  }).done(function(res) {
-    // HACK: there is definitely a better way to do this
-    var list = '';
-    res.forEach(function(each) {
-      var item =
-            '<ons-list-item>' +
-            each.deviceType +
-            '</ons-list-item>';
-      list += item;
-    });
-
-    document.getElementById('add-device-type-list').innerHTML = list;
-    document.getElementById('add-device-type-dialog').show();
-
-    $('#add-device-type-list').on('click', 'ons-list-item', function(event){
-      document.getElementById('add-device-type').value = this.textContent;
-      document.getElementById('add-device-type-dialog').hide();
-    });
-  });
-}
-
-/** Add Device tab -----------------------------------------------------------*/
-// TODO: VERIFY FUNCTIONALITY
-var addDeviceScan = function() {
-  var checkedFieldId = util.getCheckedFieldId('add-device-selector');
-  util.scanBarcode(checkedFieldId);
-};
-
-var addDeviceSubmit = function() {
-  var fields = {
-    deviceType: 'add-device-type',
-    deviceId: 'add-device-id',
-    deviceLocation: 'add-device-location',
-  };
-
-  var payload = util.makePayload(fields);
-  console.log(payload);
-
-  delete fields.deviceType;
-  addDevice.submit(SERVER_URL, ENDPOINTS.addDevice, payload, fields);
+  addDevice: '/device', // POST
+  checkoutDevice: '/device', // POST - deployment
+  getDeviceTypes: '/devicetype', // GET
+  search: '/thing/find', // GET
+  updateDevice: '/device/update', // POST
 };
 
 /** Deploy Device tab --------------------------------------------------------*/
