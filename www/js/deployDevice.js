@@ -1,30 +1,27 @@
 var deployDevice = (function() {
 
-  var deployDevice = function(server, endpoint, payload) {
-    var url = server + endpoint;
+  var deployDeviceScan = function() {
+    var checkedFieldId = util.getCheckedFieldId('deploy-device-selector');
+    util.scanBarcode(checkedFieldId);
+  };
 
-    $.ajax({
-      url: url,
-      data: JSON.stringify(payload),
-      contentType: 'application/json',
-      type: 'POST',
-      crossDomain: true,
-      dataType: 'json',
-    }).done(function(res) {
-      if (res.success) {
-        // TODO: don't use alerts for status updates
-        ons.notification.alert('Transaction complete');
-      } else {
-        // TODO: don't use alerts for status updates
-        ons.notification.alert(res.message);
-      }
-    }).fail(function(e) {
-      // TODO: see if this message needs to be pretty-printed
-      ons.notification.alert(JSON.stringify(e, null, 4));
-      console.error('ERROR %s', e, JSON.stringify(e));
-    });
-  }
+  // Submit button function, get values from all input fields, handle
+  // appropriately, and submit to the server
+  var submitDeployment = function() {
+    var fields = {
+      deployment: 'deploy-deployment-id',
+      device: 'deploy-device-id',
+      location: 'deploy-location-id',
+    };
 
-  return {submit: deployDevice};
+    // Make a JSON payload from the input fields
+    payload = util.makePayload(fields);
+
+    util.submit(SERVER_URL, ENDPOINTS.addDevice, payload);
+  };
+
+  return { scan: deployDeviceScan,
+           submit: submitDeployment
+         };
 
 })();
