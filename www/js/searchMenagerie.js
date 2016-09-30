@@ -1,29 +1,58 @@
 var searchMenagerie = (function() {
 
-  var searchMenagerie = function(server, endpoint, id) {
-    var url = server + endpoint + id;
+  var searchMenagerieScan = function() {
+    util.scanBarcode('search-device-id');
+  };
 
-    $.ajax({
-      url: url,
-      contentType: 'application/json',
-      type: 'GET',
-      crossDomain: true,
-      dataType: 'json',
-    }).done(function(res) {
-      if (res.success) {
-        // TODO: don't use alerts for status updates
-        ons.notification.alert('Transaction complete');
-      } else {
-        // TODO: don't use alerts for status updates
-        ons.notification.alert(res.message);
-      }
-    }).fail(function(e) {
-      // TODO: see if this message needs to be pretty-printed
-      ons.notification.alert(JSON.stringify(e, null, 4));
-      console.error('ERROR %s', e, JSON.stringify(e));
-    });
+  var searchMenagerieSubmit = function() {
+    // TODO: This is dumb for the sake of reusing code, fix 'makePayload'
+    var searchId = util.makePayload({id: 'search-device-id'}).id;
+    util.get(
+      SERVER_URL,
+      ENDPOINTS.search + '/' + searchId,
+      console.log, console.log);
+
+    util.get(
+      SERVER_URL,
+      ENDPOINTS.search + '/' + searchId,
+      function(res) {
+        var list;
+        if (res.type === 'location') {
+          list = locationHandler(res.result);
+        } else if (res.type === 'device') {
+          list = deviceHandler(res.result);
+        }
+
+        // Display the list of device names to the 'add-device-list' modal
+        document.getElementById('search-menagerie-list').innerHTML = list;
+        document.getElementById('search-menagerie-dialog').show();
+      });
+  };
+
+  // HACK: there is definitely a better way to do this
+  function toItem(each) {
+    return ('<ons-list-item>' +
+            each +
+            '</ons-list-item>')}
+
+  return { scan: searchMenagerieScan,
+           submit: searchMenagerieSubmit
+         };
+
+  function locationHandler(loc) {
+    
   }
 
-  return {submit: searchMenagerie};
+  function deviceHandler(dev) {
+    var list = '<ons-list-header>Device Name</ons-list-header>';
+    list += toItem(dev.type.name);
+    list += '<ons-list-header>Device Location UUID</ons-list-header>';
+    list += toItem(dev.location.uuid);
+    list += '<ons-list-header>Device Status</ons-list-header>';
+    list += toItem(dev.status);
+    list += '<ons-list-header>Device Description</ons-list-header>';
+    list += toItem(dev.description);
+    return list;
+  }
 
 })();
