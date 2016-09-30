@@ -35,24 +35,36 @@ var searchMenagerie = (function() {
             each +
             '</ons-list-item>')}
 
-  return { scan: searchMenagerieScan,
-           submit: searchMenagerieSubmit
-         };
-
+  // HACK: there is definitely a better way to do this
   function locationHandler(loc) {
-    
+    var list = '<ons-list-header>Location Name</ons-list-header>';
+    list += toItem(loc.description);
+    return list;
   }
 
+  // HACK: there is definitely a better way to do this
   function deviceHandler(dev) {
     var list = '<ons-list-header>Device Name</ons-list-header>';
     list += toItem(dev.type.name);
-    list += '<ons-list-header>Device Location UUID</ons-list-header>';
-    list += toItem(dev.location.uuid);
+
+    if (dev.location) {
+      list += '<ons-list-header>Device Location UUID</ons-list-header>';
+      list += toItem(dev.location.uuid);
+    }
+
     list += '<ons-list-header>Device Status</ons-list-header>';
     list += toItem(dev.status);
-    list += '<ons-list-header>Device Description</ons-list-header>';
-    list += toItem(dev.description);
+
+    if (dev.description) {
+      list += '<ons-list-header>Device Description</ons-list-header>';
+      list += toItem(dev.description);
+    }
+
     return list;
   }
+
+  return { scan: searchMenagerieScan,
+           submit: searchMenagerieSubmit
+         };
 
 })();
