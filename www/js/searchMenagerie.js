@@ -26,6 +26,8 @@ var searchMenagerie = (function() {
         // Display the list of device names to the 'add-device-list' modal
         document.getElementById('search-menagerie-list').innerHTML = list;
         document.getElementById('search-menagerie-dialog').show();
+      }, function(err) {
+        ons.notification.alert(err);
       });
   };
 
@@ -44,12 +46,17 @@ var searchMenagerie = (function() {
 
   // HACK: there is definitely a better way to do this
   function deviceHandler(dev) {
-    var list = '<ons-list-header>Device Name</ons-list-header>';
+    var list = '<ons-list-header>Device Type</ons-list-header>';
     list += toItem(dev.type.name);
 
-    if (dev.location) {
-      list += '<ons-list-header>Device Location UUID</ons-list-header>';
-      list += toItem(dev.location.uuid);
+    if (dev.name) {
+      list += '<ons-list-header>Device Name</ons-list-header>';
+      list += toItem(dev.name);
+    }
+
+    if (dev.location.description) {
+      list += '<ons-list-header>Device Location</ons-list-header>';
+      list += toItem(dev.location.description);
     }
 
     list += '<ons-list-header>Device Status</ons-list-header>';
