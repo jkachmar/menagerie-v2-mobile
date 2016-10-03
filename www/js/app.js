@@ -2,12 +2,11 @@ var WEB_APP_TOKEN = '';
 var	SERVER_URL = '';
 
 var ENDPOINTS = {
-  addDevice: '/device', // POST
+  device: '/device', // POST
   checkoutDevice: '/device', // POST - deployment
   getDeviceTypes: '/devicetype', // GET
   search: '/thing/find', // GET
   status: '/health', // GET
-  updateDevice: '/device/update', // POST
 };
 
 var SUBMIT_BUTTON_LIST = [
@@ -34,20 +33,6 @@ var deployDeviceSubmit = function() {
 
   deployDevice.submit(SERVER_URL, payload);
 };
-
-/** Search Menagerie tab -------------------------------------------------------*/
-// TODO: Rename to reflect device-agnostic searches
-var searchDeviceScan = function() {
-  util.scanBarcode('search-device-id');
-}
-
-// TODO: Rename to reflect device-agnostic searches
-var searchDeviceSubmit = function() {
-  var endpoint = '/thing/find'
-  var searchField = document.getElementById('search-device-id').value;
-
-  searchMenagerie.submit(SERVER_URL, endpoint, searchField);
-}
 
 /** Configuration tab --------------------------------------------------------*/
 // TODO: REFACTOR

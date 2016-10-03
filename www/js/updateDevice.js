@@ -48,6 +48,8 @@ var updateDevice = (function() {
   // Submit button function, get values from all input fields, handle
   // appropriately, and submit to the server
   var submitDevice = function() {
+    var endpoint = ENDPOINTS.device + '/' + document.getElementById('update-menagerie-id').value;
+
     var fields = {
       name: 'update-device-name',
       assetTag: 'update-device-tag',
@@ -58,7 +60,7 @@ var updateDevice = (function() {
     payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(SERVER_URL, ENDPOINTS.updateDevice, payload);
+    util.submit(SERVER_URL, endpoint, payload);
   };
 
   return { scan: updateDeviceScan,
