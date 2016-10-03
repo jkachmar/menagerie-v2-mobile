@@ -13,7 +13,8 @@ monaca preview
 
 #### iOS Emulator
 
-**ACHTUNG**
+**!ACHTUNG!**
+
 Normally one would add `iOS` as the platform under Cordova, however at the time
 of writing the Cordova project has not yet released a version compatible with 
 iOS 10/Xcode 8.
