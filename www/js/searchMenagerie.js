@@ -1,20 +1,18 @@
 var searchMenagerie = (function() {
+  // bind copy of SERVER_URL from config module
+  var server = cfg.SERVER_URL;
 
   var searchMenagerieScan = function() {
     util.scanBarcode('search-device-id');
   };
 
   var searchMenagerieSubmit = function() {
-    // TODO: This is dumb for the sake of reusing code, fix 'makePayload'
-    var searchId = util.makePayload({id: 'search-device-id'}).id;
-    util.get(
-      SERVER_URL,
-      ENDPOINTS.search + '/' + searchId,
-      console.log, console.log);
+    var endpoint = cfg.ENDPOINTS.search + '/';
+    endpoint += document.getElementById('search-device-id').value;
 
     util.get(
-      SERVER_URL,
-      ENDPOINTS.search + '/' + searchId,
+      server,
+      endpoint,
       function(res) {
         var list;
         if (res.type === 'location') {
@@ -46,6 +44,7 @@ var searchMenagerie = (function() {
 
   // HACK: there is definitely a better way to do this
   function deviceHandler(dev) {
+    dev
     var list = '<ons-list-header>Device Type</ons-list-header>';
     list += toItem(dev.type.name);
 

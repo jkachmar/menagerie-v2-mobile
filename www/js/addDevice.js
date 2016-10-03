@@ -1,16 +1,17 @@
 var addDevice = (function() {
+  // bind copy of SERVER_URL from config module
+  var server = cfg.SERVER_URL;
 
   // local storage object for device name/id
   var deviceType = {};
-
   // Gets a list of device types from Menagerie and displays them as a modal
   // of tappable list elements, where the 'friendly name' corresponds to a
   // Menagerie device typeId
   var getDeviceTypes = function() {
-    // GET -> device type from Menagerie using global SERVER_URL and ENDPOINTS
-    util.get(
-      SERVER_URL,
-      ENDPOINTS.getDeviceTypes,
+    var endpoint = cfg.ENDPOINTS.getDeviceTypes;
+
+    // GET -> device type from Menagerie
+    util.get(server, endpoint,
       function(res) {
         // HACK: there is definitely a better way to do this
         var list = '';
@@ -48,6 +49,7 @@ var addDevice = (function() {
   // Submit button function, get values from all input fields, handle
   // appropriately, and submit to the server
   var submitDevice = function() {
+    var endpoint = cfg.ENDPOINTS.device;
     var fields = {
       name: 'add-device-name',
       assetTag: 'add-device-tag',
@@ -58,7 +60,7 @@ var addDevice = (function() {
     payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(SERVER_URL, ENDPOINTS.device, payload);
+    util.submit(server, endpoint, payload);
   };
 
   return { scan: addDeviceScan,

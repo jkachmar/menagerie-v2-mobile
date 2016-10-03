@@ -1,4 +1,6 @@
 var updateDevice = (function() {
+  // bind copy of SERVER_URL from config module
+  var server = cfg.SERVER_URL;
 
   // local storage object for device name/id
   var deviceType = {};
@@ -7,10 +9,9 @@ var updateDevice = (function() {
   // of tappable list elements, where the 'friendly name' corresponds to a
   // Menagerie device typeId
   var getDeviceTypes = function() {
-    // GET -> device type from Menagerie using global SERVER_URL and ENDPOINTS
-    util.get(
-      SERVER_URL,
-      ENDPOINTS.getDeviceTypes,
+    // GET -> device type from Menagerie
+    var endpoint = cfg.ENDPOINTS.getDeviceTypes;
+    util.get(server, endpoint,
       function(res) {
         // HACK: there is definitely a better way to do this
         var list = '';
@@ -48,7 +49,7 @@ var updateDevice = (function() {
   // Submit button function, get values from all input fields, handle
   // appropriately, and submit to the server
   var submitDevice = function() {
-    var endpoint = ENDPOINTS.device + '/' + document.getElementById('update-menagerie-id').value;
+    var endpoint = cfg.ENDPOINTS.device + '/' + document.getElementById('update-menagerie-id').value;
 
     var fields = {
       name: 'update-device-name',
@@ -60,7 +61,7 @@ var updateDevice = (function() {
     payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(SERVER_URL, endpoint, payload);
+    util.submit(server, endpoint, payload);
   };
 
   return { scan: updateDeviceScan,
