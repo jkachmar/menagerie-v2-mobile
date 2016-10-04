@@ -14,11 +14,11 @@ var deployDevice = (function() {
     var fields = {
       deployment: 'deploy-deployment-id',
       device: 'deploy-device-id',
-      location: 'deploy-location-id',
+      location: 'deploy-location-id'
     };
 
     // Make a JSON payload from the input fields
-    payload = util.makePayload(fields);
+    var payload = util.makePayload(fields);
 
     util.submit(server, endpoint, payload);
   };
@@ -28,22 +28,3 @@ var deployDevice = (function() {
          };
 
 })();
-
-
-// /** Deploy Device tab --------------------------------------------------------*/
-// // TODO: VERIFY FUNCTIONALITY
-// var deployDeviceScan = function() {
-//   var checkedFieldId = util.getCheckedFieldId('deploy-device-selector');
-//   util.scanBarcode(checkedFieldId);
-// };
-
-// var deployDeviceSubmit = function() {
-//   var fields = {
-//     deviceId: 'deploy-device-id',
-//     deviceLocation: 'deploy-device-location',
-//   };
-
-//   var payload = util.makePayload(fields);
-
-//   deployDevice.submit(SERVER_URL, payload);
-// };

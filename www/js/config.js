@@ -7,7 +7,7 @@ var cfg = (function() {
     checkoutDevice: '/device', // POST - deployment
     getDeviceTypes: '/devicetype', // GET
     search: '/thing/find', // GET
-    status: '/health', // GET
+    status: '/health' // GET
   };
 
   var SUBMIT_BUTTON_LIST = [
@@ -48,6 +48,6 @@ var cfg = (function() {
   return { SERVER_URL: SERVER_URL,
            ENDPOINTS: ENDPOINTS,
            authHandler: authHandler
-         }
+         };
 
 })();

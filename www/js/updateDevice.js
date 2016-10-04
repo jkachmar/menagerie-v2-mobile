@@ -39,7 +39,7 @@ var updateDevice = (function() {
           document.getElementById('update-device-type-dialog').hide();
         });
       });
-  }
+  };
 
   var updateDeviceScan = function() {
     var checkedFieldId = util.getCheckedFieldId('update-device-selector');
@@ -54,11 +54,11 @@ var updateDevice = (function() {
     var fields = {
       name: 'update-device-name',
       assetTag: 'update-device-tag',
-      deviceId: 'update-device-id',
+      deviceId: 'update-device-id'
     };
 
     // Make a JSON payload from the input fields
-    payload = util.makePayload(fields);
+    var payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
     util.submit(server, endpoint, payload);
@@ -66,7 +66,7 @@ var updateDevice = (function() {
 
   return { scan: updateDeviceScan,
            submit: submitDevice,
-           getTypes: getDeviceTypes,
+           getTypes: getDeviceTypes
          };
 
 })();

@@ -10,9 +10,9 @@ var util = (function() {
       url: url,
       type: 'GET',
       crossDomain: true,
-      dataType: 'json',
+      dataType: 'json'
     }).done(cbDone).fail(cbFail);
-  }
+  };
 
   var postToMenagerie = function(server, endpoint, payload, cbDone, cbFail) {
     var url = server + endpoint;
@@ -23,9 +23,9 @@ var util = (function() {
       contentType: 'application/json',
       type: 'POST',
       crossDomain: true,
-      dataType: 'json',
+      dataType: 'json'
     }).done(cbDone).fail(cbFail);
-  }
+  };
 
 
   var submitPayload = function(server, endpoint, payload) {
@@ -41,7 +41,7 @@ var util = (function() {
         ons.notification.alert('ERROR %s', JSON.stringify(res, null, 4));
         console.error('ERROR %s', res, JSON.stringify(res));
       });
-  }
+  };
 
   /** Common Utility Functions -----------------------------------------------*/
   var sanitizePayload = function(result) {
@@ -51,7 +51,7 @@ var util = (function() {
     sanitized.text = result.text.replace('/find/location/', '');
     sanitized.barcode = result.text;
     return sanitized;
-  }
+  };
 
   var getCheckedFieldId = function(inputFieldName) {
     var checkedFieldId =
@@ -61,19 +61,19 @@ var util = (function() {
           .nextElementSibling
           .getAttribute('id');
     return checkedFieldId;
-  }
+  };
 
   var scanBarcode = function(checkedFieldId) {
     cordova.plugins.barcodeScanner.scan(
       function (result) {
-        sanitizedResult = sanitizePayload(result);
+        var sanitizedResult = sanitizePayload(result);
         document.getElementById(checkedFieldId).value = sanitizedResult.text;
       },
       function (error) {
         ons.notification.alert('Scanning failed: ' + error);
       }
     );
-  }
+  };
 
   var makePayload = function(fields) {
     var payload = {};
@@ -83,7 +83,7 @@ var util = (function() {
     });
 
     return payload;
-  }
+  };
 
   return {
     get: getFromMenagerie,
@@ -92,6 +92,6 @@ var util = (function() {
     sanitizePayload: sanitizePayload,
     getCheckedFieldId: getCheckedFieldId,
     scanBarcode: scanBarcode,
-    makePayload: makePayload,
+    makePayload: makePayload
   };
 })();

@@ -33,7 +33,8 @@ var searchMenagerie = (function() {
   function toItem(each) {
     return ('<ons-list-item>' +
             each +
-            '</ons-list-item>')}
+            '</ons-list-item>');
+  }
 
   // HACK: there is definitely a better way to do this
   function locationHandler(loc) {
@@ -44,7 +45,6 @@ var searchMenagerie = (function() {
 
   // HACK: there is definitely a better way to do this
   function deviceHandler(dev) {
-    dev
     var list = '<ons-list-header>Device Type</ons-list-header>';
     list += toItem(dev.type.name);
 
