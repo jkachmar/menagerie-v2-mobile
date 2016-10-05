@@ -26,5 +26,4 @@ var deployDevice = (function() {
   return { scan: deployDeviceScan,
            submit: submitDeployment
          };
-
 })();

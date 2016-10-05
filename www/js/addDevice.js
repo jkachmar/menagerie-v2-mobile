@@ -67,5 +67,4 @@ var addDevice = (function() {
            submit: submitDevice,
            getTypes: getDeviceTypes
          };
-
 })();

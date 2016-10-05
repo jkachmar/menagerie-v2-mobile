@@ -17,8 +17,15 @@ var searchMenagerie = (function() {
         var list;
         if (res.type === 'location') {
           list = locationHandler(res.result);
+
+        // Menagerie responds with a 'device' even if nothing is found
         } else if (res.type === 'device') {
-          list = deviceHandler(res.result);
+            // Check if this is a real device (i.e. if a required field exists)
+            if (res.result.type)  {
+                list = deviceHandler(res.result);
+            } else {
+                ons.notification.alert("ID Not Found in Menagerie!");
+            }
         }
 
         // Display the list of device names to the 'add-device-list' modal
@@ -72,5 +79,4 @@ var searchMenagerie = (function() {
   return { scan: searchMenagerieScan,
            submit: searchMenagerieSubmit
          };
-
 })();

@@ -1,5 +1,4 @@
 var util = (function() {
-
   /** Common AJAX Functions -----------------------------------------------*/
 
   var getFromMenagerie = function(server, endpoint, cbDone, cbFail) {

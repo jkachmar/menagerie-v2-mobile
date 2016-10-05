@@ -49,5 +49,4 @@ var cfg = (function() {
            ENDPOINTS: ENDPOINTS,
            authHandler: authHandler
          };
-
 })();

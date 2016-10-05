@@ -68,5 +68,4 @@ var updateDevice = (function() {
            submit: submitDevice,
            getTypes: getDeviceTypes
          };
-
 })();
