@@ -1,7 +1,7 @@
 var cfg = (function() {
   var ENDPOINTS = {
     device: '/device', // POST
-    checkoutDevice: '/device', // POST - deployment
+    checkoutDevice: '/deployment/check-out', // POST - deployment
     getDeviceTypes: '/devicetype', // GET
     search: '/thing/find', // GET
     status: '/health' // GET
