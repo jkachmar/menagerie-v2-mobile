@@ -1,7 +1,4 @@
 var searchMenagerie = (function() {
-  // bind copy of SERVER_URL from config module
-  var server = cfg.SERVER_URL;
-
   var searchMenagerieScan = function() {
     util.scanBarcode('search-device-id');
   };
@@ -11,7 +8,7 @@ var searchMenagerie = (function() {
     endpoint += document.getElementById('search-device-id').value;
 
     util.get(
-      server,
+      SERVER_URL,
       endpoint,
       function(res) {
         var list;

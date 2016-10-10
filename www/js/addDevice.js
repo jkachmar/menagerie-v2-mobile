@@ -1,7 +1,4 @@
 var addDevice = (function() {
-  // bind copy of SERVER_URL from config module
-  var server = cfg.SERVER_URL;
-
   // local storage object for device name/id
   var deviceType = {};
   // Gets a list of device types from Menagerie and displays them as a modal
@@ -11,7 +8,7 @@ var addDevice = (function() {
     var endpoint = cfg.ENDPOINTS.getDeviceTypes;
 
     // GET -> device type from Menagerie
-    util.get(server, endpoint,
+    util.get(SERVER_URL, endpoint,
       function(res) {
         // HACK: there is definitely a better way to do this
         var list = '';
@@ -60,7 +57,7 @@ var addDevice = (function() {
     var payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(server, endpoint, payload);
+    util.submit(SERVER_URL, endpoint, payload);
   };
 
   return { scan: addDeviceScan,

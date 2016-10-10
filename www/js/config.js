@@ -1,7 +1,4 @@
 var cfg = (function() {
-  var WEB_APP_TOKEN = '';
-  var	SERVER_URL = '';
-
   var ENDPOINTS = {
     device: '/device', // POST
     checkoutDevice: '/device', // POST - deployment
@@ -45,8 +42,7 @@ var cfg = (function() {
       });
   };
 
-  return { SERVER_URL: SERVER_URL,
-           ENDPOINTS: ENDPOINTS,
+  return { ENDPOINTS: ENDPOINTS,
            authHandler: authHandler
          };
 })();
