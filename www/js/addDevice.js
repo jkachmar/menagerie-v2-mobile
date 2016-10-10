@@ -27,7 +27,7 @@ var addDevice = (function() {
         document.getElementById('add-device-type-list').innerHTML = list;
         document.getElementById('add-device-type-dialog').show();
 
-        $('#add-device-type-list').on('click', 'ons-list-item', function(event){
+        $('#add-device-type-list').on('click', 'ons-list-item', function(){
           document.getElementById('add-device-type').value = this.textContent;
           deviceType.name = this.textContent;
 
