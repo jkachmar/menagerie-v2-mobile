@@ -1,13 +1,19 @@
 var util = (function() {
   /** Common AJAX Functions -----------------------------------------------*/
-
   var getFromMenagerie = function(server, endpoint, cbDone, cbFail) {
+    if (server === '') {
+      ons.notification.alert('No server has been specified!');
+      return;
+    }
     var url = server + endpoint;
 
     // GET -> device type from Menagerie using global SERVER_URL and ENDPOINTS
     $.ajax({
       url: url,
       type: 'GET',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + WEB_APP_TOKEN);
+      },
       crossDomain: true,
       dataType: 'json'
     }).done(cbDone).fail(cbFail);

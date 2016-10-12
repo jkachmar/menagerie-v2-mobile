@@ -15,20 +15,10 @@ var cfg = (function() {
   ];
 
   /** Configuration tab --------------------------------------------------------*/
-  // TODO: REFACTOR
-  function getToken() {
-    console.log('WEB APP TOKEN', WEB_APP_TOKEN);
-    return 'Bearer ' + WEB_APP_TOKEN;
-  }
-
-  function setAuthorizationToken(xhr) {
-    xhr.setRequestHeader('Authorization', getToken());
-  }
-
   // Handle token auth and server URL
   var authHandler = function() {
     SERVER_URL = document.getElementById('config-server-field').value;
-    WEB_APP_TOKEN = document.getElementById('config-server-field').value;
+    WEB_APP_TOKEN = document.getElementById('config-token-field').value;
 
     util.get(
       SERVER_URL,
@@ -38,6 +28,7 @@ var cfg = (function() {
           document.getElementById(each).removeAttribute('disabled', '');
         });
       }, function(res) {
+        SERVER_URL = ''; // Clear server URL if invalid
         ons.notification.alert('Unable to connect to server :(');
       });
   };
