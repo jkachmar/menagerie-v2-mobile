@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><widget xmlns="http://www.w3.org/ns/widgets" id="com.example.helloworld" version="1.0.0">
-  <name>onsen-test</name>
+<?xml version="1.0" encoding="UTF-8"?><widget xmlns="http://www.w3.org/ns/widgets" id="com.wework.menagerie" version="1.0.0">
+  <name>menagerie</name>
   <description/>
   <author/>
   <content src="index.html"/>

@@ -1,4 +1,4 @@
-## Menagerie 2.0 Companion Application
+## Menagerie 2.0 Mobile App
 
 <div style="text-align:center"><img src="menagerie-frontend.png"/></div>
 
