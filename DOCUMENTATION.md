@@ -4,6 +4,17 @@ This document will attempt to provide a comprehensive overview of the Menagerie
 2.0 Mobile App, a compaion application to the Menagerie 2.0 Device Management
 System.
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+    - [Cordova Requirements](#cordova-requirements)
+    - [Xcode Requirements](#xcode-requirements)
+    - [Build for iOS](#build-for-ios)
+
+<!-- markdown-toc end -->
+
 ### Prerequisites
 
 Before attempting to install this application, ensure you have the following:
