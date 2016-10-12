@@ -1,6 +1,6 @@
 ## Menagerie 2.0 Mobile App
 
-<div style="text-align:center"><img src="menagerie-frontend.png"/></div>
+<div style="text-align:center"><img src="images/menagerie-frontend.png"/></div>
 
 This is the mobile companion to the upcoming [Menagerie v2] device management
 system. The app is meant to provide a proof-of-concept for interacting with

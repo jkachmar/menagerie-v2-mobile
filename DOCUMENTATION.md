@@ -12,6 +12,10 @@ System.
     - [Cordova Requirements](#cordova-requirements)
     - [Xcode Requirements](#xcode-requirements)
     - [Build for iOS](#build-for-ios)
+- [Usage](#usage)
+    - [Configuring the Application](#configuring-the-application)
+    - [Adding a Device](#adding-a-device)
+    - [Deploying a Device](#deploying-a-device)
 
 <!-- markdown-toc end -->
 
@@ -60,11 +64,11 @@ From Xcode, select **File -> Open**, navigate to
 Select **menagerie** in the left column, then select your *Development Team* 
 from the **Team** dropdown.
 
-<div style="text-align:center"><img src="xcode-signing.png"/></div>
+<div style="text-align:center"><img src="images/xcode-signing.png"/></div>
 
 Select your iOS device from the toolbar...
 
-<div style="text-align:center"><img src="xcode-toolbar.png"/></div>
+<div style="text-align:center"><img src="images/xcode-toolbar.png"/></div>
 
 ...and wait for Xcode to build symbol files for the device. This may take
 a long time.
@@ -74,3 +78,26 @@ copy it to your iOS device. After the build is complete, you will need to go to
 **Settings -> General -> Profile -> <Your Developer Id>** and select *Trust*.
 
 The application should now be present on your home screen!
+
+### Usage
+
+Usage of the Menagerie Mobile App is split up into five components, from left
+to right on the bottom tab-bar:
+
+- Adding a Device
+- Deploying a Device
+- Updating a Device
+- Searching for a Device or Location
+- Configuring the Application
+
+#### Configuring the Application
+
+<div style="text-align:center"><img src="images/configure-app.png"/></div>
+
+#### Adding a Device
+
+<div style="text-align:center"><img src="images/add-device.png"/></div>
+
+#### Deploying a Device
+
+<div style="text-align:center"><img src="images/deploy-device.png"/></div>
