@@ -27,6 +27,9 @@ var util = (function() {
       data: JSON.stringify(payload),
       contentType: 'application/json',
       type: 'POST',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + WEB_APP_TOKEN);
+      },
       crossDomain: true,
       dataType: 'json'
     }).done(cbDone).fail(cbFail);
