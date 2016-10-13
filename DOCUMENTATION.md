@@ -16,6 +16,7 @@ System.
     - [Configuring the Application](#configuring-the-application)
     - [Adding a Device](#adding-a-device)
     - [Deploying a Device](#deploying-a-device)
+    - [Updating a Device](#updating-a-device)
 
 <!-- markdown-toc end -->
 
@@ -101,3 +102,7 @@ to right on the bottom tab-bar:
 #### Deploying a Device
 
 <div style="text-align:center"><img src="images/deploy-device.png"/></div>
+
+#### Updating a Device
+
+<div style="text-align:center"><img src="images/update-device.png"/></div>
