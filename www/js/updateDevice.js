@@ -46,7 +46,7 @@ var updateDevice = (function() {
   // Submit button function, get values from all input fields, handle
   // appropriately, and submit to the server
   var submitDevice = function() {
-    var endpoint = cfg.ENDPOINTS.device + '/' + document.getElementById('update-menagerie-id').value;
+    var uuid = document.getElementById('update-menagerie-id').value;
 
     var fields = {
       name: 'update-device-name',
@@ -56,9 +56,20 @@ var updateDevice = (function() {
 
     // Make a JSON payload from the input fields
     var payload = util.makePayload(fields);
-    payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(SERVER_URL, endpoint, payload);
+    searchMenagerie.search(uuid, function(resp) {
+      var res = resp.result;
+      var endpoint = cfg.ENDPOINTS.device + '/' + res.id;
+
+      Object.keys(payload).forEach(function(k) {
+        payload[k] = payload[k] ? payload[k] : res[k];
+      });
+
+      payload.type = deviceType.id; // Get device typeId from its name
+      util.submit(SERVER_URL, endpoint, payload, function() {
+        ons.notification.alert('Transaction complete!');
+      });
+    });
   };
 
   return { scan: updateDeviceScan,

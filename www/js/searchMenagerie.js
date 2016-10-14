@@ -3,14 +3,22 @@ var searchMenagerie = (function() {
     util.scanBarcode('search-device-id');
   };
 
-  var searchMenagerieSubmit = function() {
+  var searchMenagerieSearch = function(uuid, cb) {
     var endpoint = cfg.ENDPOINTS.search + '/';
-    endpoint += document.getElementById('search-device-id').value;
+    endpoint += uuid;
 
     util.get(
       SERVER_URL,
       endpoint,
-      function(res) {
+      cb,
+      function(err) {
+        ons.notification.alert(err);
+      });
+  };
+
+  var searchMenagerieSubmit = function() {
+    var uuid = document.getElementById('search-device-id').value;
+    searchMenagerieSearch(uuid, function(res) {
         var list;
         if (res.type === 'location') {
           list = locationHandler(res.result);
@@ -28,9 +36,7 @@ var searchMenagerie = (function() {
         // Display the list of device names to the 'add-device-list' modal
         document.getElementById('search-menagerie-list').innerHTML = list;
         document.getElementById('search-menagerie-dialog').show();
-      }, function(err) {
-        ons.notification.alert(err);
-      });
+    });
   };
 
   // HACK: there is definitely a better way to do this
@@ -74,6 +80,7 @@ var searchMenagerie = (function() {
   }
 
   return { scan: searchMenagerieScan,
-           submit: searchMenagerieSubmit
+           submit: searchMenagerieSubmit,
+           search: searchMenagerieSearch
          };
 })();

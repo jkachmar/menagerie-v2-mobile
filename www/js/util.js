@@ -7,7 +7,6 @@ var util = (function() {
     }
     var url = server + endpoint;
 
-    // GET -> device type from Menagerie using global SERVER_URL and ENDPOINTS
     $.ajax({
       url: url,
       type: 'GET',
@@ -36,14 +35,12 @@ var util = (function() {
   };
 
 
-  var submitPayload = function(server, endpoint, payload) {
-    // POST -> device update within Menagerie
+  var submitPayload = function(server, endpoint, payload, cb) {
     postToMenagerie(
       server, endpoint, payload,
       function(res) {
+        if (cb) cb(res);
         console.log('AJAX response: ', JSON.stringify(res));
-        // TODO: don't use alerts for status updates
-        ons.notification.alert('Transaction complete');
       }, function (res) {
         // TODO: see if this message needs to be pretty-printed
         ons.notification.alert('ERROR %s', JSON.stringify(res, null, 4));

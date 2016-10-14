@@ -57,7 +57,9 @@ var addDevice = (function() {
     var payload = util.makePayload(fields);
     payload.type = deviceType.id; // Get device typeId from its name
 
-    util.submit(SERVER_URL, endpoint, payload);
+    util.submit(SERVER_URL, endpoint, payload, function() {
+        ons.notification.alert('Transaction complete!');
+      });
   };
 
   return { scan: addDeviceScan,
